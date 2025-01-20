@@ -125,6 +125,21 @@ const testCases: { [a: string]: TestCase } = {
       ],
     ],
   },
+  空配列: {
+    a: [],
+    b: [],
+    expected: [],
+  },
+  要素が異なる配列: {
+    a: ["a", "b", "c"],
+    b: ["d", "e", "f"],
+    expected: [],
+  },
+  要素数が異なる配列: {
+    a: ["a", "b", "c"],
+    b: ["a", "b"],
+    expected: [],
+  },
 };
 
 testEach<TestCase>(testCases, ({ a, b, expected }) => {

@@ -3,10 +3,20 @@ export type IndexMapping = [number, number][];
 // 総当たりだから効率は悪そうだけど、値が重複することはあんまりないだろうし・・・
 
 /**
- *  受け取った２つの配列のインデックスをマッピングする。
+ *  同じ要素を含み、順序が異なる可能性のある配列を受け取って、インデックスをマッピングする。
  *  同じ値が含まれる可能性があるため、可能性のあるすべてのマッピングを返す。
+ *
+ *  以下の場合には空の配列を返す。
+ *
+ *  - 両方の配列が空
+ *  - 配列の要素数が異なる
+ *  - 同じ要素を含んでいない
  */
-export function mapIndex(a: unknown[], b: unknown[]): IndexMapping[] {
+export function mapIndex<T>(a: T[], b: T[]): IndexMapping[] {
+  if (a.length !== b.length || a.length === 0) {
+    return [];
+  }
+
   const bMap = createValueIndexMap(b);
 
   const mapping: IndexMapping[] = [];
@@ -35,6 +45,10 @@ export function mapIndex(a: unknown[], b: unknown[]): IndexMapping[] {
   }
 
   generateMappings(0, []);
+
+  if (mapping.at(0)?.length !== a.length) {
+    return [];
+  }
 
   return mapping;
 }
