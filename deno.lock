@@ -19,8 +19,10 @@
     "jsr:@std/io@0.213.1": "0.213.1",
     "jsr:@std/io@0.225": "0.225.0",
     "jsr:@std/log@~0.224.13": "0.224.13",
+    "jsr:@std/path@*": "0.213.1",
     "jsr:@std/path@0.213.1": "0.213.1",
-    "jsr:@std/streams@^1.0.8": "1.0.8"
+    "jsr:@std/streams@^1.0.8": "1.0.8",
+    "npm:zod@^3.24.1": "3.24.1"
   },
   "jsr": {
     "@bartlomieju/postgres@0.17.2": {
@@ -33,7 +35,7 @@
         "jsr:@std/encoding",
         "jsr:@std/fmt@0.213.1",
         "jsr:@std/io@0.213.1",
-        "jsr:@std/path"
+        "jsr:@std/path@0.213.1"
       ]
     },
     "@std/assert@0.213.1": {
@@ -110,6 +112,11 @@
       "dependencies": [
         "jsr:@std/bytes@^1.0.3"
       ]
+    }
+  },
+  "npm": {
+    "zod@3.24.1": {
+      "integrity": "sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A=="
     }
   },
   "redirects": {
@@ -279,7 +286,8 @@
       "jsr:@std/csv@*",
       "jsr:@std/fmt@^1.0.4",
       "jsr:@std/log@~0.224.13",
-      "jsr:@std/path@*"
+      "jsr:@std/path@*",
+      "npm:zod@^3.24.1"
     ]
   }
 }
