@@ -1,8 +1,17 @@
-import { Client } from "@bartlomieju/postgres";
+import { Client, QueryObjectResult } from "@bartlomieju/postgres";
 import { SQLResult } from "./main.ts";
 
 export async function query(client: Client, sql: string): Promise<SQLResult> {
-  const actualResult = await client.queryObject<Record<string, unknown>>(sql);
+  let actualResult: QueryObjectResult<Record<string, unknown>>;
+  const tx = client.createTransaction("transaction");
+  try {
+    await tx.begin();
+    actualResult = await tx.queryObject<Record<string, unknown>>(sql);
+  } catch (e) {
+    throw e;
+  } finally {
+    await tx.rollback();
+  }
 
   const columns = actualResult.columns;
   if (!columns) {
