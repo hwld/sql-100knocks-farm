@@ -1,9 +1,10 @@
-import { Client, QueryObjectResult } from "@bartlomieju/postgres";
+import { QueryObjectResult } from "@bartlomieju/postgres";
 import { SQLResult } from "./main.ts";
+import { db } from "./db.ts";
 
-export async function query(client: Client, sql: string): Promise<SQLResult> {
+export async function query(sql: string): Promise<SQLResult> {
   let actualResult: QueryObjectResult<Record<string, unknown>>;
-  const tx = client.createTransaction("transaction");
+  const tx = db.createTransaction("transaction");
   try {
     await tx.begin();
     actualResult = await tx.queryObject<Record<string, unknown>>(sql);
