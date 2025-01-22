@@ -51,5 +51,5 @@ export async function openProblem(no: number): Promise<Result> {
   }
 
   await exec(config.get("editorCommand"), [getProblemPath(no)]);
-  return Result.ok(undefined);
+  return Result.ok();
 }

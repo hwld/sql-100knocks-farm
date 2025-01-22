@@ -11,6 +11,6 @@ export function isOk<T>(result: Result<T>) {
 }
 
 export const Result = {
-  ok: <T>(value: T): Result<T> => ({ status: "ok", value }),
+  ok: <T>(value?: T): Result<T> => ({ status: "ok", value: value as T }),
   error: <T>(): Result<T> => ({ status: "error" }),
 };
