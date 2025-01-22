@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "check": "deno check src/main.ts && deno lint",
+    "dev": "deno run -A --env-file src/main.ts"
   },
   "imports": {
     "@bartlomieju/postgres": "jsr:@bartlomieju/postgres@^0.17.2",

@@ -28,6 +28,7 @@
     "jsr:@std/path@0.213.1": "0.213.1",
     "jsr:@std/streams@^1.0.8": "1.0.8",
     "jsr:@std/text@~1.0.7": "1.0.10",
+    "npm:@types/node@*": "22.5.4",
     "npm:zod@^3.24.1": "3.24.1"
   },
   "jsr": {
@@ -149,6 +150,15 @@
     }
   },
   "npm": {
+    "@types/node@22.5.4": {
+      "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
+    "undici-types@6.19.8": {
+      "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
+    },
     "zod@3.24.1": {
       "integrity": "sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A=="
     }
