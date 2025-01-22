@@ -8,7 +8,7 @@ type Args = { problemNo: number };
 
 export const testProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
-    .description(`Test problem \`${problemNo}\``)
+    .description(`Test \`problem ${problemNo}\``)
     .action(async () => {
       const sqlText = Deno.readTextFileSync(getProblemPath(problemNo));
       const actualResult = await query(sqlText);

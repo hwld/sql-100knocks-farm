@@ -7,7 +7,7 @@ type Args = { problemNo: number };
 
 export const openProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
-    .description(`Open the file for problem \`${problemNo}\``)
+    .description(`Open the file for \`problem ${problemNo}\``)
     .action(async () => {
       const result = await openProblem(problemNo);
       if (isErr(result)) {
