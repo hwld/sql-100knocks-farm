@@ -2,7 +2,6 @@ import { join } from "@std/path";
 import { SQLResult } from "./main.ts";
 import { config } from "./config.ts";
 import { exec } from "./exec.ts";
-import { logger } from "./logger.ts";
 import { Result } from "./result.ts";
 
 export function testEach<T>(params: Record<string, T>, cb: (p: T) => void) {
@@ -48,7 +47,6 @@ export function problemExists(no: number): boolean {
 
 export async function openProblem(no: number): Promise<Result> {
   if (!problemExists(no)) {
-    logger.error(`\`Problem ${no}\` is not found`);
     return Result.error();
   }
 

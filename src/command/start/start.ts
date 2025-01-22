@@ -19,6 +19,7 @@ export const startProblemCommand = () => {
     .action(async (_, problemNo) => {
       const result = await openProblem(problemNo);
       if (isErr(result)) {
+        logger.error(`\`Problem ${problemNo}\` is not found`);
         return;
       }
 
