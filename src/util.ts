@@ -27,12 +27,26 @@ export function parseTableData({
 }
 
 export function getProblemPath(no: number): string {
-  return join(config.get("100knocksDir"), String(no), "problem.sql");
+  return join(config.get("100knocksDir"), no.toString(), "problem.sql");
+}
+
+export function getProblemResultPath(no: number): string {
+  return join(config.get("100knocksDir"), no.toString(), "result.txt");
 }
 
 export function getAnswerPath(no: number): string {
   // TODO: 複数の回答があり得る
-  return join(config.get("100knocksDir"), String(no), "answers", "1.csv");
+  return join(config.get("100knocksDir"), no.toString(), "answers", "1.csv");
+}
+
+export function getAnswerResultPath(no: number): string {
+  // TODO:
+  return join(
+    config.get("100knocksDir"),
+    no.toString(),
+    "answers",
+    "result.txt"
+  );
 }
 
 export function problemExists(no: number): boolean {

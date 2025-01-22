@@ -7,10 +7,9 @@ import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
 
 // TODO: move
-type SQLResultRow = string[];
 export type SQLResult = {
   columns: string[];
-  rows: SQLResultRow[];
+  rows: string[][];
 };
 
 async function main() {

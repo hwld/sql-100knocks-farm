@@ -5,6 +5,7 @@ import z from "zod";
 const ConfigSchema = z.object({
   "100knocksDir": z.string(),
   editorCommand: z.string(),
+  diffOption: z.string().optional(),
 });
 
 type ConfigRecords = z.infer<typeof ConfigSchema>;
@@ -27,7 +28,7 @@ class Config {
     this.#loaded = true;
   }
 
-  get(key: keyof ConfigRecords) {
+  get<T extends keyof ConfigRecords>(key: T): ConfigRecords[T] {
     if (!this.#loaded || !this.#records) {
       logger.error("Config not loaded");
       Deno.exit(1);

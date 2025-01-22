@@ -1,4 +1,5 @@
 {
     "100knocksDir": "./100knocks",
-    "editorCommand": "code-insiders"
+    "editorCommand": "code-insiders",
+    "diffOption": "-d"
 }
