@@ -1,10 +1,18 @@
 import { parse } from "@std/csv";
+import { SQLResult } from "./main.ts";
 
-export function loadSQLResultFromCSV(csvText: string) {
-  const data = parse(csvText);
+export function loadSQLResultsFromCSV(
+  answerPaths: string[]
+): Promise<{ answerPath: string; result: SQLResult }[]> {
+  return Promise.all(
+    answerPaths.map(async (path) => {
+      const csvText = await Deno.readTextFile(path);
+      const raw = parse(csvText);
 
-  const columns = data[0];
-  const rows = data.slice(1);
-
-  return { columns, rows };
+      return {
+        answerPath: path,
+        result: { columns: raw[0], rows: raw.slice(1) },
+      };
+    })
+  );
 }

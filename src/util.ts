@@ -1,4 +1,4 @@
-import { join } from "@std/path";
+import { format, join, parse } from "@std/path";
 import { SQLResult } from "./main.ts";
 import { config } from "./config.ts";
 import { exec } from "./exec.ts";
@@ -26,32 +26,43 @@ export function parseTableData({
   });
 }
 
-export function getProblemPath(no: number): string {
-  return join(config.get("100knocksDir"), no.toString(), "problem.sql");
+export function getProblemPath(problemNo: number): string {
+  return join(config.get("100knocksDir"), problemNo.toString(), "problem.sql");
 }
 
-export function getProblemResultPath(no: number): string {
-  return join(config.get("100knocksDir"), no.toString(), "result.txt");
+export function getProblemResultPath(problemNo: number): string {
+  return join(config.get("100knocksDir"), problemNo.toString(), "result.txt");
 }
 
-export function getAnswerPath(no: number): string {
-  // TODO: 複数の回答があり得る
-  return join(config.get("100knocksDir"), no.toString(), "answers", "1.csv");
+/**
+ *  問題の回答ファイルのパスを最大3つまで返す
+ */
+export function getAnswerPaths(problemNo: number): string[] {
+  const paths: string[] = [];
+  for (let i = 0; i < 3; i++) {
+    const path = join(
+      config.get("100knocksDir"),
+      problemNo.toString(),
+      "answers",
+      `${i + 1}.csv`
+    );
+
+    if (fileExists(path)) {
+      paths.push(path);
+    }
+  }
+
+  return paths;
 }
 
-export function getAnswerResultPath(no: number): string {
-  // TODO:
-  return join(
-    config.get("100knocksDir"),
-    no.toString(),
-    "answers",
-    "result.txt"
-  );
+export function getAnswerResultPath(answerPath: string): string {
+  const path = parse(answerPath);
+  path.base = path.name + ".txt";
+  return format(path);
 }
 
-export function problemExists(no: number): boolean {
+export function fileExists(path: string): boolean {
   try {
-    const path = getProblemPath(no);
     const info = Deno.statSync(path);
     return info.isFile;
   } catch {
@@ -60,7 +71,8 @@ export function problemExists(no: number): boolean {
 }
 
 export async function openProblem(no: number): Promise<Result> {
-  if (!problemExists(no)) {
+  const path = getProblemPath(no);
+  if (!fileExists(path)) {
     return Result.error();
   }
 
