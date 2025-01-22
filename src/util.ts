@@ -35,15 +35,15 @@ export function getProblemResultPath(problemNo: number): string {
 }
 
 /**
- *  問題の回答ファイルのパスを最大3つまで返す
+ *  問題の解答ファイルのパスを最大3つまで返す
  */
-export function getAnswerPaths(problemNo: number): string[] {
+export function getExpectedPaths(problemNo: number): string[] {
   const paths: string[] = [];
   for (let i = 0; i < 3; i++) {
     const path = join(
       config.get("100knocksDir"),
       problemNo.toString(),
-      "answers",
+      "expected",
       `${i + 1}.csv`
     );
 
@@ -55,8 +55,8 @@ export function getAnswerPaths(problemNo: number): string[] {
   return paths;
 }
 
-export function getAnswerResultPath(answerPath: string): string {
-  const path = parse(answerPath);
+export function getExpectedResultPath(expectedPath: string): string {
+  const path = parse(expectedPath);
   path.base = path.name + ".txt";
   return format(path);
 }

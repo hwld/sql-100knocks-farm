@@ -3,26 +3,27 @@ import { SQLResult } from "./main.ts";
 import { db } from "./db.ts";
 
 export async function query(sql: string): Promise<SQLResult> {
-  let actualResult: QueryObjectResult<Record<string, unknown>>;
+  let result: QueryObjectResult<Record<string, unknown>>;
+
   const tx = db.createTransaction("transaction");
   try {
     await tx.begin();
-    actualResult = await tx.queryObject<Record<string, unknown>>(sql);
+    result = await tx.queryObject<Record<string, unknown>>(sql);
   } catch (e) {
     throw e;
   } finally {
     await tx.rollback();
   }
 
-  const columns = actualResult.columns;
+  const columns = result.columns;
   if (!columns) {
     throw new Error("不正なデータ");
   }
 
-  const rows = actualResult.rows.map((row) => {
+  const rows = result.rows.map((row) => {
     const newRow: string[] = [];
     for (const key in row) {
-      const index = actualResult.columns?.indexOf(key);
+      const index = result.columns?.indexOf(key);
       if (index === undefined || index === -1) {
         throw new Error("不正なデータ");
       }
