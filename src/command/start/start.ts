@@ -1,22 +1,28 @@
 import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "../../build-command.ts";
-import { config } from "../../config.ts";
-import { exec } from "../../exec.ts";
 import { logger } from "../../logger.ts";
 import { testProblemCommand } from "./test.ts";
 import { helpCommand } from "../help.ts";
 import { exitCommand } from "../exit.ts";
 import { openProblemCommand } from "./open.ts";
-import { getProblemPath } from "../../util.ts";
+import { openProblem } from "../../util.ts";
 import { returnCommand } from "./return.ts";
+import { nextProblemCommand } from "./next.ts";
+import { prevProblemCommand } from "./prev.ts";
+import { isErr } from "../../result.ts";
+import { ProblemNavigator } from "../../problem-navigator.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
-    .description("Start a problem")
+    .description("Open problem <problemNo>")
     .arguments("<problemNo:number>")
     .action(async (_, problemNo) => {
-      exec(config.get("editorCommand"), [getProblemPath(problemNo)]);
-      const currentProblemNo = problemNo;
+      const result = await openProblem(problemNo);
+      if (isErr(result)) {
+        return;
+      }
+
+      const problemNav = new ProblemNavigator(problemNo);
 
       while (true) {
         let shouldReturnToMain = false;
@@ -27,13 +33,21 @@ export const startProblemCommand = () => {
         const command = buildCommand();
         command
           .command("help", helpCommand({ command }))
-          .command("test", testProblemCommand({ problemNo: currentProblemNo }))
-          .command("open", openProblemCommand({ problemNo: currentProblemNo }))
+          .command(
+            "test",
+            testProblemCommand({ problemNo: problemNav.current() })
+          )
+          .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
+          .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))
+          .command(
+            "open",
+            openProblemCommand({ problemNo: problemNav.current() })
+          )
           .command("..", returnCommand({ onReturn: returnToMain }))
           .command("exit", exitCommand());
 
         try {
-          const line = prompt(`skf/${currentProblemNo}>`)?.split(" ");
+          const line = prompt(`skf/${problemNav.current()}>`)?.split(" ");
           if (!line) {
             continue;
           }
