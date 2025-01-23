@@ -1,7 +1,7 @@
 import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "../../build-command.ts";
 import { logger } from "../../logger.ts";
-import { testProblemCommand } from "./test.ts";
+import { runProblemCommand } from "./run.ts";
 import { helpCommand } from "../help.ts";
 import { exitCommand } from "../exit.ts";
 import { openProblemCommand } from "./open.ts";
@@ -36,8 +36,8 @@ export const startProblemCommand = () => {
         command
           .command("help", helpCommand({ command }))
           .command(
-            "test",
-            testProblemCommand({ problemNo: problemNav.current() })
+            "run",
+            runProblemCommand({ problemNo: problemNav.current() })
           )
           .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
           .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))

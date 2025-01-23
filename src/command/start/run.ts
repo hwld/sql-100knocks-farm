@@ -11,9 +11,9 @@ import { isEqualSQLResult } from "../../sql/compare.ts";
 
 type Args = { problemNo: number };
 
-export const testProblemCommand = ({ problemNo }: Args) => {
+export const runProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
-    .description(`Test \`problem ${problemNo}\``)
+    .description(`Run \`problem ${problemNo}\``)
     .action(async () => {
       const answer = await executeAnswer(problemNo);
       const expectedList = await parseExpected(problemNo);
