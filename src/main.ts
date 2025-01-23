@@ -5,9 +5,11 @@ import { buildCommand } from "./build-command.ts";
 import { startProblemCommand } from "./command/start/start.ts";
 import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
+import { exec } from "./exec.ts";
 
 async function main() {
   config.load();
+  await exec("docker", ["compose", "up", "-d"]);
 
   while (true) {
     const command = buildCommand();
