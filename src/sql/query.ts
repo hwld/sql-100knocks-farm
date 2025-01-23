@@ -1,6 +1,10 @@
 import { QueryObjectResult } from "@bartlomieju/postgres";
-import { SQLResult } from "./main.ts";
 import { db } from "./db.ts";
+
+export type SQLResult = {
+  columns: string[];
+  rows: string[][];
+};
 
 export async function query(sql: string): Promise<SQLResult> {
   let result: QueryObjectResult<Record<string, unknown>>;

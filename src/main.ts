@@ -6,12 +6,6 @@ import { startProblemCommand } from "./command/start/start.ts";
 import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
 
-// TODO: move
-export type SQLResult = {
-  columns: string[];
-  rows: string[][];
-};
-
 async function main() {
   config.load();
 

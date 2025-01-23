@@ -5,13 +5,13 @@ import { testProblemCommand } from "./test.ts";
 import { helpCommand } from "../help.ts";
 import { exitCommand } from "../exit.ts";
 import { openProblemCommand } from "./open.ts";
-import { openProblem } from "../../util.ts";
 import { returnCommand } from "./return.ts";
 import { nextProblemCommand } from "./next.ts";
 import { prevProblemCommand } from "./prev.ts";
 import { isErr } from "../../result.ts";
-import { ProblemNavigator } from "../../problem-navigator.ts";
 import { moveProblemCommand } from "./mv.ts";
+import { openProblem } from "../../problem/open.ts";
+import { ProblemNavigator } from "../../problem/navigator.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()

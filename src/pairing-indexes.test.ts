@@ -1,8 +1,8 @@
-import { IndexMapping, mapIndex } from "./map-index.ts";
-import { testEach } from "./util.ts";
+import { IndexPairs, pairingIndexes } from "./pairing-indexes.ts";
+import { testEach } from "./test-util.ts";
 import { assertEquals } from "@std/assert";
 
-type TestCase = { a: unknown[]; b: unknown[]; expected: IndexMapping[] };
+type TestCase = { a: unknown[]; b: unknown[]; expected: IndexPairs[] };
 
 const testCases: { [a: string]: TestCase } = {
   重複なし: {
@@ -143,6 +143,6 @@ const testCases: { [a: string]: TestCase } = {
 };
 
 testEach<TestCase>(testCases, ({ a, b, expected }) => {
-  const actual = mapIndex(a, b);
+  const actual = pairingIndexes(a, b);
   assertEquals(actual, expected);
 });

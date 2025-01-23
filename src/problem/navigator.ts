@@ -1,6 +1,6 @@
-import { logger } from "./logger.ts";
-import { isErr, Result } from "./result.ts";
-import { openProblem } from "./util.ts";
+import { logger } from "../logger.ts";
+import { isErr, Result } from "../result.ts";
+import { openProblem } from "./open.ts";
 
 export class ProblemNavigator {
   #currentProblemNo: number;

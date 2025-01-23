@@ -1,7 +1,7 @@
 import { buildCommand } from "../../build-command.ts";
 import { logger } from "../../logger.ts";
+import { openProblem } from "../../problem/open.ts";
 import { isErr } from "../../result.ts";
-import { openProblem } from "../../util.ts";
 
 type Args = { problemNo: number };
 
