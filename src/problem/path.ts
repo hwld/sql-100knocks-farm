@@ -7,7 +7,15 @@ export function getProblemPath(problemNo: number): string {
 }
 
 export function getProblemResultPath(problemNo: number): string {
-  return join(config.get("100knocksDir"), problemNo.toString(), "result.txt");
+  return join(config.get("100knocksDir"), `${problemNo}`, "result.txt");
+}
+
+export function getExpectedDir(problemNo: number) {
+  return join(config.get("100knocksDir"), `${problemNo}`, "expected");
+}
+
+export function getExpectedFileName(expectedNo: number) {
+  return `${expectedNo}.csv`;
 }
 
 /**
@@ -16,13 +24,7 @@ export function getProblemResultPath(problemNo: number): string {
 export function getExpectedPaths(problemNo: number): string[] {
   const paths: string[] = [];
   for (let i = 0; i < 3; i++) {
-    const path = join(
-      config.get("100knocksDir"),
-      problemNo.toString(),
-      "expected",
-      `${i + 1}.csv`
-    );
-
+    const path = join(getExpectedDir(problemNo), getExpectedFileName(i + 1));
     if (stat(path)?.isFile) {
       paths.push(path);
     }

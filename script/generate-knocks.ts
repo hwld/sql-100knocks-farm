@@ -1,7 +1,11 @@
 import { join } from "@std/path";
 import { config } from "../src/config.ts";
 import { DOMParser, Element } from "@b-fuze/deno-dom";
-import { stat } from "../src/fs.ts";
+import {
+  getExpectedDir,
+  getExpectedFileName,
+  getProblemPath,
+} from "../src/problem/path.ts";
 
 type KnockElement = {
   problem: Element;
@@ -87,25 +91,19 @@ function parseKnocks(knockElements: KnockElement[]) {
 
 async function writeKnockFiles(knock: Knock[]) {
   const promisesToWriteKnocks = knock.map(async (knock, index) => {
-    const dir = join(config.get("100knocksDir"), `${index + 1}`);
-    if (!stat(dir)?.isDirectory) {
-      await Deno.mkdir(dir, { recursive: true });
-    }
+    const problemNo = index + 1;
 
-    const expectedDir = join(dir, "expected");
-    if (!stat(expectedDir)?.isDirectory) {
-      await Deno.mkdir(expectedDir, { recursive: true });
-    }
+    const problemPath = getProblemPath(problemNo);
+    const problemDir = join(problemPath, "..");
+    await Deno.mkdir(problemDir, { recursive: true });
+    await Deno.writeTextFile(problemPath, `/*\n  ${knock.problem}\n*/`);
 
-    await Deno.writeTextFile(
-      join(dir, "problem.sql"),
-      `/*\n  ${knock.problem}\n*/`
-    );
-
+    const expectedDir = getExpectedDir(problemNo);
+    await Deno.mkdir(expectedDir, { recursive: true });
     const promisesToWriteSolutions = knock.solutions.map(
       async (solution, i) => {
         await Deno.writeTextFile(
-          join(expectedDir, `${i + 1}.csv`),
+          join(expectedDir, getExpectedFileName(i + 1)),
           solution.expectedCsv
         );
       }
