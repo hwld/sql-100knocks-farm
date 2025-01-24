@@ -11,6 +11,7 @@
     "@std/fmt": "jsr:@std/fmt@^1.0.4",
     "@std/log": "jsr:@std/log@^0.224.13",
     "@std/path": "jsr:@std/path",
+    "neverthrow": "npm:neverthrow@^8.1.1",
     "zod": "npm:zod@^3.24.1"
   }
 }
