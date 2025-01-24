@@ -1,8 +1,7 @@
-export function fileExists(path: string): boolean {
+export function stat(path: string): Deno.FileInfo | undefined {
   try {
-    const info = Deno.statSync(path);
-    return info.isFile;
+    return Deno.lstatSync(path);
   } catch {
-    return false;
+    return undefined;
   }
 }

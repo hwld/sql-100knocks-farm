@@ -4,6 +4,7 @@
     "dev": "deno run -A --env-file src/main.ts"
   },
   "imports": {
+    "@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
     "@bartlomieju/postgres": "jsr:@bartlomieju/postgres@^0.17.2",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",
     "@std/assert": "jsr:@std/assert@1",

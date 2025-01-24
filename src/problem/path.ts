@@ -1,6 +1,6 @@
 import { format, join, parse } from "@std/path";
 import { config } from "../config.ts";
-import { fileExists } from "../fs.ts";
+import { stat } from "../fs.ts";
 
 export function getProblemPath(problemNo: number): string {
   return join(config.get("100knocksDir"), problemNo.toString(), "problem.sql");
@@ -23,7 +23,7 @@ export function getExpectedPaths(problemNo: number): string[] {
       `${i + 1}.csv`
     );
 
-    if (fileExists(path)) {
+    if (stat(path)?.isFile) {
       paths.push(path);
     }
   }
