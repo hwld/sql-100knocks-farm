@@ -1,12 +1,7 @@
 import { buildCommand } from "../../build-command.ts";
-import { config } from "../../config.ts";
-import { exec } from "../../exec.ts";
 import { logger } from "../../logger.ts";
-import {
-  executeAnswer,
-  executeExpected,
-  ProblemResult,
-} from "../../problem/execute.ts";
+import { executeAnswer, executeExpected } from "../../problem/execute.ts";
+import { openProbremResultFiles } from "../../problem/open.ts";
 import { isEqualSQLResult } from "../../sql/compare.ts";
 
 type Args = { problemNo: number };
@@ -44,27 +39,3 @@ export const runProblemCommand = ({ problemNo }: Args) => {
       await openProbremResultFiles({ answer, expectedList });
     });
 };
-
-async function openProbremResultFiles({
-  answer,
-  expectedList,
-}: {
-  answer: ProblemResult;
-  expectedList: ProblemResult[];
-}) {
-  const diffOption = config.get("diffOption");
-
-  const promisesToOpen = expectedList.map(async (expected) => {
-    if (diffOption) {
-      await exec(config.get("editorCommand"), [
-        diffOption,
-        answer.resultPath,
-        expected.resultPath,
-      ]);
-    } else {
-      await exec(config.get("editorCommand"), [answer.resultPath]);
-    }
-  });
-
-  await Promise.all(promisesToOpen);
-}
