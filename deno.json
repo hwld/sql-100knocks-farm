@@ -2,7 +2,8 @@
   "tasks": {
     "check": "deno check src/main.ts && deno lint",
     "dev": "deno run -A --env-file src/main.ts",
-    "generate": "deno run -A script/generate-knocks.ts"
+    "generate": "deno run -A script/generate-knocks.ts",
+    "build": "deno compile -A --env-file --output skf  src/main.ts"
   },
   "imports": {
     "@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.49",
