@@ -4,9 +4,9 @@ import { exec } from "../../exec.ts";
 import { logger } from "../../logger.ts";
 import {
   executeAnswer,
-  parseExpected,
+  executeExpected,
   ProblemResult,
-} from "../../problem/reuslt.ts";
+} from "../../problem/execute.ts";
 import { isEqualSQLResult } from "../../sql/compare.ts";
 
 type Args = { problemNo: number };
@@ -15,8 +15,14 @@ export const runProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
     .description(`Run \`problem ${problemNo}\``)
     .action(async () => {
-      const answer = await executeAnswer(problemNo);
-      const expectedList = await parseExpected(problemNo);
+      const rawAnswer = await executeAnswer(problemNo);
+      if (rawAnswer.isErr()) {
+        logger.error(`${rawAnswer.error}`);
+        return;
+      }
+
+      const answer = rawAnswer.value;
+      const expectedList = await executeExpected(problemNo);
 
       if (expectedList.length === 0) {
         logger.error(

@@ -3,6 +3,7 @@ import { getProblemPath, getProblemResultPath } from "./path.ts";
 import { parse } from "@std/csv";
 import { getExpectedPaths, getExpectedResultPath } from "./path.ts";
 import { formatSQLResult } from "../sql/format.ts";
+import { err, ok, Result } from "../result.ts";
 
 export type ProblemResult = {
   /**
@@ -19,9 +20,16 @@ export type ProblemResult = {
 /**
  * 問題の回答を実行してProblemResultを取得する
  */
-export async function executeAnswer(problemNo: number): Promise<ProblemResult> {
+export async function executeAnswer(
+  problemNo: number
+): Promise<Result<ProblemResult, string>> {
   const sqlText = await Deno.readTextFile(getProblemPath(problemNo));
-  const answerResult = await query(sqlText);
+
+  const rawAnswerResult = await query(sqlText);
+  if (rawAnswerResult.isErr()) {
+    return err(rawAnswerResult.error);
+  }
+  const answerResult = rawAnswerResult.value;
 
   const answerResultPath = getProblemResultPath(problemNo);
   await Deno.writeTextFile(answerResultPath, formatSQLResult(answerResult));
@@ -31,13 +39,13 @@ export async function executeAnswer(problemNo: number): Promise<ProblemResult> {
     resultPath: answerResultPath,
   };
 
-  return answerProblemResult;
+  return ok(answerProblemResult);
 }
 
 /**
  *  問題の解答データをパースしてProblemResultを取得する
  */
-export async function parseExpected(
+export async function executeExpected(
   problemNo: number
 ): Promise<ProblemResult[]> {
   const expectedPaths = getExpectedPaths(problemNo);
