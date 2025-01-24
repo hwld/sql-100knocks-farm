@@ -1,7 +1,6 @@
 import { buildCommand } from "../../build-command.ts";
 import { logger } from "../../logger.ts";
 import { openProblem } from "../../problem/open.ts";
-import { isErr } from "../../result.ts";
 
 type Args = { problemNo: number };
 
@@ -10,7 +9,7 @@ export const openProblemCommand = ({ problemNo }: Args) => {
     .description(`Open the file for \`problem ${problemNo}\``)
     .action(async () => {
       const result = await openProblem(problemNo);
-      if (isErr(result)) {
+      if (result.isErr()) {
         logger.error(`\`Problem ${problemNo}\` is not found`);
       }
     });

@@ -8,7 +8,6 @@ import { openProblemCommand } from "./open.ts";
 import { returnCommand } from "./return.ts";
 import { nextProblemCommand } from "./next.ts";
 import { prevProblemCommand } from "./prev.ts";
-import { isErr } from "../../result.ts";
 import { moveProblemCommand } from "./mv.ts";
 import { openProblem } from "../../problem/open.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
@@ -19,7 +18,7 @@ export const startProblemCommand = () => {
     .arguments("<problemNo:number>")
     .action(async (_, problemNo) => {
       const result = await openProblem(problemNo);
-      if (isErr(result)) {
+      if (result.isErr()) {
         logger.error(`\`Problem ${problemNo}\` is not found`);
         return;
       }
