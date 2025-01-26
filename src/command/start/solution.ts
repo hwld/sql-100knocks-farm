@@ -1,5 +1,5 @@
 import { buildCommand } from "../../build-command.ts";
-import { getKnockMap } from "../../context/knocks.ts";
+import { getProblemMap } from "../../context/problem-map.ts";
 
 type Args = { problemNo: number };
 
@@ -7,9 +7,9 @@ export const solutionCommand = ({ problemNo }: Args) => {
   return buildCommand()
     .description(`Show solution for \`problem ${problemNo}\``)
     .action(() => {
-      const knock = getKnockMap().get(problemNo);
+      const problem = getProblemMap().get(problemNo);
 
-      knock?.solutions.forEach((solution) => {
+      problem?.solutions.forEach((solution) => {
         console.log(`%c\n${solution.sql}`, "color: green");
       });
       console.log();

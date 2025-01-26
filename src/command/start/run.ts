@@ -1,5 +1,5 @@
 import { buildCommand } from "../../build-command.ts";
-import { getKnockMap } from "../../context/knocks.ts";
+import { getProblemMap } from "../../context/problem-map.ts";
 import { logger } from "../../logger.ts";
 import { executeAnswer } from "../../problem/execute.ts";
 import { writeAnswerResult, writeExpectedResults } from "../../problem/fs.ts";
@@ -13,9 +13,9 @@ export const runProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
     .description(`Run \`problem ${problemNo}\``)
     .action(async () => {
-      const knock = getKnockMap().get(problemNo);
-      if (!knock) {
-        throw new Error("Failed to load knock");
+      const problem = getProblemMap().get(problemNo);
+      if (!problem) {
+        throw new Error("Failed to load problem");
       }
 
       const rawAnswer = await executeAnswer(problemNo);
@@ -27,7 +27,7 @@ export const runProblemCommand = ({ problemNo }: Args) => {
       await writeAnswerResult({ problemNo, result: answerResult });
 
       const isEqualResults = await Promise.all(
-        knock.solutions.map(async (solution) => {
+        problem.solutions.map(async (solution) => {
           const expectedResult = parseCsv(solution.expectedCsv);
           await writeExpectedResults({
             problemNo,
@@ -45,6 +45,6 @@ export const runProblemCommand = ({ problemNo }: Args) => {
       }
 
       console.log("%cFailed", "color: red");
-      await openProbremResultFiles(knock);
+      await openProbremResultFiles(problem);
     });
 };

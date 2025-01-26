@@ -1,70 +1,61 @@
 import { join } from "@std/path";
 import { DOMParser, Element } from "@b-fuze/deno-dom";
-import { getKnocksPath, getProblemPath } from "../src/problem/path.ts";
+import { getAllProblemsPath, getProblemPath } from "../src/problem/path.ts";
 import { withConfigContext } from "../src/context/config.ts";
+import { Problem } from "../src/problem/problem.ts";
 
-type KnockElement = {
-  problem: Element;
+type ProblemElement = {
+  problemText: Element;
   solutions: Element[];
 };
 
-type Knock = {
-  no: number;
-  problem: string;
-  solutions: {
-    no: number;
-    sql: string;
-    expectedCsv: string;
-  }[];
-};
-
-async function generateKnocks() {
+async function generateProblems() {
   const solutionHtml = await Deno.readTextFile(join(".", "solution.html"));
-  const knockElements = parseKnockElements(solutionHtml);
-  const knocks = parseKnocks(knockElements);
+  const problemElements = parseProblemElements(solutionHtml);
+  const problems = parseProblems(problemElements);
 
-  await writeKnockFiles(knocks);
-  await writeKnocksMeta(knocks);
+  await writeProblemFiles(problems);
+  await writeAllProblemFile(problems);
 }
 
-await withConfigContext(generateKnocks);
+await withConfigContext(generateProblems);
 
-function parseKnockElements(html: string): KnockElement[] {
+function parseProblemElements(html: string): ProblemElement[] {
   const doc = new DOMParser().parseFromString(html, "text/html");
   const divs = [...doc.querySelectorAll("body>div.jp-Cell")].slice(6, -1);
 
-  const knockElements: KnockElement[] = [];
+  const problemElements: ProblemElement[] = [];
 
-  let currentKnock: KnockElement | null = null;
+  let currentProblemEl: ProblemElement | null = null;
   // divsが .jp-MarkdownCell, .jp-CodeCell, (.jp-CodeCell...)
   // の繰り返しで構成されていることを期待している
   divs.forEach((div, i) => {
     if (div.classList.contains("jp-MarkdownCell")) {
-      if (currentKnock) {
-        knockElements.push(currentKnock);
+      if (currentProblemEl) {
+        problemElements.push(currentProblemEl);
       }
 
-      currentKnock = {
-        problem: div,
+      currentProblemEl = {
+        problemText: div,
         solutions: [],
       };
     } else if (div.classList.contains("jp-CodeCell")) {
-      currentKnock!.solutions.push(div);
+      currentProblemEl!.solutions.push(div);
     }
 
-    if (i === divs.length - 1 && currentKnock) {
-      knockElements.push(currentKnock);
+    if (i === divs.length - 1 && currentProblemEl) {
+      problemElements.push(currentProblemEl);
     }
   });
 
-  return knockElements;
+  return problemElements;
 }
 
-function parseKnocks(knockElements: KnockElement[]) {
-  const knocks = knockElements.map((element, i): Knock => {
+function parseProblems(problemElements: ProblemElement[]) {
+  const problems = problemElements.map((element, i): Problem => {
     return {
       no: i + 1,
-      problem: element.problem.textContent.trim(),
+      text: element.problemText.textContent.trim(),
       solutions: element.solutions.map((solution, i) => {
         return {
           no: i + 1,
@@ -83,24 +74,24 @@ function parseKnocks(knockElements: KnockElement[]) {
   /**
    * 1 ~ 79問までは上のロジックで対応できると思うけど、それ以降の問題は一つ問題につき1度のSQL実行とは限らないので対応できない
    */
-  return knocks.slice(0, 79);
+  return problems.slice(0, 79);
 }
 
-async function writeKnockFiles(knocks: Knock[]) {
-  const promisesToWriteKnocks = knocks.map(async (knock, index) => {
+async function writeProblemFiles(problems: Problem[]) {
+  const promisesToWriteProblems = problems.map(async (problem, index) => {
     const problemNo = index + 1;
 
     const problemPath = getProblemPath(problemNo);
     const problemDir = join(problemPath, "..");
     await Deno.mkdir(problemDir, { recursive: true });
-    await Deno.writeTextFile(problemPath, `/*\n  ${knock.problem}\n*/`);
+    await Deno.writeTextFile(problemPath, `/*\n  ${problem.text}\n*/`);
   });
 
-  await Promise.all(promisesToWriteKnocks);
+  await Promise.all(promisesToWriteProblems);
 }
 
-async function writeKnocksMeta(knocks: Knock[]) {
-  await Deno.writeTextFile(getKnocksPath(), JSON.stringify(knocks));
+async function writeAllProblemFile(problems: Problem[]) {
+  await Deno.writeTextFile(getAllProblemsPath(), JSON.stringify(problems));
 }
 
 function tableToCsv(table: Element | null) {

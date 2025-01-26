@@ -23,6 +23,6 @@ export function getExpectedResultPath({
   );
 }
 
-export function getKnocksPath(): string {
-  return join(getConfig()["100knocksDir"], "knocks.json");
+export function getAllProblemsPath(): string {
+  return join(getConfig()["100knocksDir"], "problems.json");
 }
