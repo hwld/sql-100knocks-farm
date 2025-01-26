@@ -70,7 +70,7 @@ function parseKnockElements(html: string): KnockElement[] {
 function parseKnocks(knockElements: KnockElement[]) {
   const knocks = knockElements.map((element): Knock => {
     return {
-      problem: element.problem.querySelector("p")!.textContent,
+      problem: element.problem.textContent.trim(),
       solutions: element.solutions.map((solution) => {
         return {
           sql: solution.querySelector(".jp-Cell-inputWrapper pre")
