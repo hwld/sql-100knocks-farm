@@ -25,7 +25,7 @@ export function isEqualSQLResult(
     }
   }
 
-  return true;
+  return false;
 }
 
 /**
