@@ -18249,7 +18249,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-019: レシート明細データ（receipt）に対し、1件あたりの売上金額（amount）が高い順にランクを付与し、先頭から10件表示せよ。項目は顧客ID（customer_id）、売上金額（amount）、付与したランクを表示させること。なお、売上金額（amount）が等しい場合は同一順位を付与するものとし、顧客ID (customer_id)の昇順に並べる。</p>
+<p>S-019: レシート明細データ（receipt）に対し、1件あたりの売上金額（amount）が高い順にランクを付与し、先頭から10件表示せよ。項目は顧客ID（customer_id）、売上金額（amount）、付与したランクを表示させること。なお、売上金額（amount）が等しい場合は同一順位を付与するものとする。</p>
 </blockquote>
 
 </div>
@@ -18270,7 +18270,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="w">    </span><span class="n">amount</span><span class="p">,</span>
 <span class="w">    </span><span class="n">RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ranking</span><span class="w"> </span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">receipt</span>
-<span>ORDER BY amount DESC, customer_id ASC</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
 <span class="p">;</span>
 </pre></div>
@@ -18329,11 +18328,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
             <td>3</td>
         </tr>
         <tr>
-          <td>CS015515000034</td>
-          <td>5480</td>
-          <td>4</td>
-        </tr>
-        <tr>
             <td>ZZ000000000000</td>
             <td>5480</td>
             <td>4</td>
@@ -18342,6 +18336,16 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
             <td>ZZ000000000000</td>
             <td>5480</td>
             <td>4</td>
+        </tr>
+        <tr>
+            <td>CS015515000034</td>
+            <td>5480</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>ZZ000000000000</td>
+            <td>5440</td>
+            <td>7</td>
         </tr>
         <tr>
             <td>CS021515000089</td>
@@ -18349,17 +18353,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
             <td>7</td>
         </tr>
         <tr>
-          <td>ZZ000000000000</td>
-          <td>5440</td>
-          <td>7</td>
-        </tr>
-        <tr>
-            <td>CS001412000160</td>
+            <td>CS020414000081</td>
             <td>5280</td>
             <td>9</td>
         </tr>
         <tr>
-            <td>CS002415000728</td>
+            <td>ZZ000000000000</td>
             <td>5280</td>
             <td>9</td>
         </tr>
