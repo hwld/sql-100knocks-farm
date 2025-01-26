@@ -1,11 +1,12 @@
 import { join } from "@std/path";
-import { config } from "../src/config.ts";
 import { DOMParser, Element } from "@b-fuze/deno-dom";
 import {
   getExpectedDir,
   getExpectedFileName,
   getProblemPath,
 } from "../src/problem/path.ts";
+import { withContext } from "../src/context/context.ts";
+import { getConfig } from "../src/context/config.ts";
 
 type KnockElement = {
   problem: Element;
@@ -21,20 +22,15 @@ type Knock = {
 };
 
 async function generateKnocks() {
-  config.load();
-
   const solutionHtml = await Deno.readTextFile(join(".", "solution.html"));
   const knockElements = parseKnockElements(solutionHtml);
   const knocks = parseKnocks(knockElements);
 
   await writeKnockFiles(knocks);
-  await Deno.writeTextFile(
-    join(config.get("100knocksDir"), "knocks.json"),
-    JSON.stringify(knocks)
-  );
+  await writeKnocksMeta(knocks);
 }
 
-await generateKnocks();
+await withContext(generateKnocks);
 
 function parseKnockElements(html: string): KnockElement[] {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -89,8 +85,8 @@ function parseKnocks(knockElements: KnockElement[]) {
   return knocks.slice(0, 79);
 }
 
-async function writeKnockFiles(knock: Knock[]) {
-  const promisesToWriteKnocks = knock.map(async (knock, index) => {
+async function writeKnockFiles(knocks: Knock[]) {
+  const promisesToWriteKnocks = knocks.map(async (knock, index) => {
     const problemNo = index + 1;
 
     const problemPath = getProblemPath(problemNo);
@@ -112,6 +108,13 @@ async function writeKnockFiles(knock: Knock[]) {
   });
 
   await Promise.all(promisesToWriteKnocks);
+}
+
+async function writeKnocksMeta(knocks: Knock[]) {
+  await Deno.writeTextFile(
+    join(getConfig()["100knocksDir"], "knocks.json"),
+    JSON.stringify(knocks)
+  );
 }
 
 function tableToCsv(table: Element | null) {

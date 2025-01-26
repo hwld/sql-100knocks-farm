@@ -1,14 +1,13 @@
 import { logger } from "./logger.ts";
-import { config } from "./config.ts";
 import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "./build-command.ts";
 import { startProblemCommand } from "./command/start/start.ts";
 import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
 import { exec } from "./exec.ts";
+import { withContext } from "./context/context.ts";
 
 async function main() {
-  config.load();
   await exec("docker", ["compose", "up", "-d"]);
 
   while (true) {
@@ -37,4 +36,4 @@ async function main() {
   }
 }
 
-main();
+await withContext(main);

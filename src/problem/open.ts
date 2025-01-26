@@ -1,4 +1,4 @@
-import { config } from "../config.ts";
+import { getConfig } from "../context/config.ts";
 import { exec } from "../exec.ts";
 import { stat } from "../fs.ts";
 import { err, ok, Result } from "../result.ts";
@@ -11,7 +11,7 @@ export async function openProblem(no: number): Promise<Result<null, null>> {
     return err(null);
   }
 
-  await exec(config.get("editorCommand"), [getProblemPath(no)]);
+  await exec(getConfig().editorCommand, [getProblemPath(no)]);
   return ok(null);
 }
 
@@ -22,17 +22,18 @@ export async function openProbremResultFiles({
   answer: ProblemResult;
   expectedList: ProblemResult[];
 }) {
-  const diffOption = config.get("diffOption");
+  const editorCommand = getConfig().editorCommand;
+  const diffOption = getConfig().diffOption;
 
   const promisesToOpen = expectedList.map(async (expected) => {
     if (diffOption) {
-      await exec(config.get("editorCommand"), [
+      await exec(editorCommand, [
         diffOption,
         answer.resultPath,
         expected.resultPath,
       ]);
     } else {
-      await exec(config.get("editorCommand"), [answer.resultPath]);
+      await exec(editorCommand, [answer.resultPath]);
     }
   });
 

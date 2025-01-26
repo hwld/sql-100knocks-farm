@@ -1,17 +1,17 @@
 import { format, join, parse } from "@std/path";
-import { config } from "../config.ts";
 import { stat } from "../fs.ts";
+import { getConfig } from "../context/config.ts";
 
 export function getProblemPath(problemNo: number): string {
-  return join(config.get("100knocksDir"), problemNo.toString(), "problem.sql");
+  return join(getConfig()["100knocksDir"], problemNo.toString(), "problem.sql");
 }
 
 export function getProblemResultPath(problemNo: number): string {
-  return join(config.get("100knocksDir"), `${problemNo}`, "result.txt");
+  return join(getConfig()["100knocksDir"], `${problemNo}`, "result.txt");
 }
 
 export function getExpectedDir(problemNo: number) {
-  return join(config.get("100knocksDir"), `${problemNo}`, "expected");
+  return join(getConfig()["100knocksDir"], `${problemNo}`, "expected");
 }
 
 export function getExpectedFileName(expectedNo: number) {
