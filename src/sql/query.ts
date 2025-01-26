@@ -7,11 +7,16 @@ import { db } from "./db.ts";
 import { err, ok, Result } from "../result.ts";
 
 export type SQLResult = {
+  isSQLEmpty?: boolean;
   columns: string[];
   rows: string[][];
 };
 
-export async function query(sql: string): Promise<Result<SQLResult, string>> {
+type QueryError = { type: "SQL_EMPTY" } | { type: "UNKNOWN"; msg: string };
+
+export async function query(
+  sql: string
+): Promise<Result<SQLResult, QueryError>> {
   let result: QueryObjectResult<Record<string, unknown>>;
 
   const tx = db.createTransaction("transaction");
@@ -20,15 +25,19 @@ export async function query(sql: string): Promise<Result<SQLResult, string>> {
     result = await tx.queryObject<Record<string, unknown>>(sql);
   } catch (e) {
     if (e instanceof TransactionError && e.cause instanceof PostgresError) {
-      return err(e.cause.message);
+      return err({ type: "UNKNOWN", msg: e.cause.message });
     }
     throw e;
   }
   await tx.rollback();
 
+  if (result.command === undefined) {
+    return err({ type: "SQL_EMPTY" });
+  }
+
   const columns = result.columns;
   if (!columns) {
-    return ok({ columns: [], rows: [[]] });
+    return ok({ columns: [], rows: [] });
   }
 
   // 結果をすべて文字列に変換する

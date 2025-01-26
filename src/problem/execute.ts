@@ -27,8 +27,19 @@ export async function executeAnswer(
 
   const rawAnswerResult = await query(sqlText);
   if (rawAnswerResult.isErr()) {
-    return err(rawAnswerResult.error);
+    switch (rawAnswerResult.error.type) {
+      case "SQL_EMPTY": {
+        return err("SQLが存在しません");
+      }
+      case "UNKNOWN": {
+        return err(rawAnswerResult.error.msg);
+      }
+      default: {
+        throw new Error(rawAnswerResult.error satisfies never);
+      }
+    }
   }
+
   const answerResult = rawAnswerResult.value;
 
   const answerResultPath = getProblemResultPath(problemNo);
