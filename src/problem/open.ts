@@ -1,8 +1,10 @@
 import { getConfig } from "../context/config.ts";
+import { Knock } from "../context/knocks.ts";
 import { exec } from "../exec.ts";
 import { stat } from "../fs.ts";
 import { err, ok, Result } from "../result.ts";
-import { ProblemResult } from "./execute.ts";
+import { getProblemResultPath } from "./path.ts";
+import { getExpectedResultPath } from "./path.ts";
 import { getProblemPath } from "./path.ts";
 
 export async function openProblem(no: number): Promise<Result<null, null>> {
@@ -15,25 +17,21 @@ export async function openProblem(no: number): Promise<Result<null, null>> {
   return ok(null);
 }
 
-export async function openProbremResultFiles({
-  answer,
-  expectedList,
-}: {
-  answer: ProblemResult;
-  expectedList: ProblemResult[];
-}) {
+export async function openProbremResultFiles(knock: Knock) {
   const editorCommand = getConfig().editorCommand;
   const diffOption = getConfig().diffOption;
 
-  const promisesToOpen = expectedList.map(async (expected) => {
+  const promisesToOpen = knock.solutions.map(async (solution) => {
     if (diffOption) {
       await exec(editorCommand, [
         diffOption,
-        answer.resultPath,
-        expected.resultPath,
+        getProblemResultPath(knock.no),
+        getExpectedResultPath({ problemNo: knock.no, solutionNo: solution.no }),
       ]);
     } else {
-      await exec(editorCommand, [answer.resultPath]);
+      await exec(editorCommand, [
+        getExpectedResultPath({ problemNo: knock.no, solutionNo: solution.no }),
+      ]);
     }
   });
 

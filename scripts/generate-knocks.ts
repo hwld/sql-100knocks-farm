@@ -1,12 +1,7 @@
 import { join } from "@std/path";
 import { DOMParser, Element } from "@b-fuze/deno-dom";
-import {
-  getExpectedDir,
-  getExpectedFileName,
-  getKnocksPath,
-  getProblemPath,
-} from "../src/problem/path.ts";
-import { withContext } from "../src/context/context.ts";
+import { getKnocksPath, getProblemPath } from "../src/problem/path.ts";
+import { withConfigContext } from "../src/context/config.ts";
 
 type KnockElement = {
   problem: Element;
@@ -14,9 +9,10 @@ type KnockElement = {
 };
 
 type Knock = {
-  problemNo: number;
+  no: number;
   problem: string;
   solutions: {
+    no: number;
     sql: string;
     expectedCsv: string;
   }[];
@@ -31,7 +27,7 @@ async function generateKnocks() {
   await writeKnocksMeta(knocks);
 }
 
-await withContext(generateKnocks);
+await withConfigContext(generateKnocks);
 
 function parseKnockElements(html: string): KnockElement[] {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -67,10 +63,11 @@ function parseKnockElements(html: string): KnockElement[] {
 function parseKnocks(knockElements: KnockElement[]) {
   const knocks = knockElements.map((element, i): Knock => {
     return {
-      problemNo: i + 1,
+      no: i + 1,
       problem: element.problem.textContent.trim(),
-      solutions: element.solutions.map((solution) => {
+      solutions: element.solutions.map((solution, i) => {
         return {
+          no: i + 1,
           sql: solution
             .querySelector(".jp-Cell-inputWrapper pre")
             ?.textContent.split("%%sql")[1]
@@ -97,18 +94,6 @@ async function writeKnockFiles(knocks: Knock[]) {
     const problemDir = join(problemPath, "..");
     await Deno.mkdir(problemDir, { recursive: true });
     await Deno.writeTextFile(problemPath, `/*\n  ${knock.problem}\n*/`);
-
-    const expectedDir = getExpectedDir(problemNo);
-    await Deno.mkdir(expectedDir, { recursive: true });
-    const promisesToWriteSolutions = knock.solutions.map(
-      async (solution, i) => {
-        await Deno.writeTextFile(
-          join(expectedDir, getExpectedFileName(i + 1)),
-          solution.expectedCsv
-        );
-      }
-    );
-    await Promise.all(promisesToWriteSolutions);
   });
 
   await Promise.all(promisesToWriteKnocks);

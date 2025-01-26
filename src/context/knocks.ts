@@ -5,16 +5,17 @@ import { getConfig } from "./config.ts";
 import { logger } from "../logger.ts";
 
 const KnockSchema = z.object({
-  problemNo: z.number(),
+  no: z.number(),
   problem: z.string(),
   solutions: z.array(
     z.object({
+      no: z.number(),
       sql: z.string(),
       expectedCsv: z.string(),
     })
   ),
 });
-type Knock = z.infer<typeof KnockSchema>;
+export type Knock = z.infer<typeof KnockSchema>;
 
 const knockMapContext = new AsyncLocalStorage<Map<number, Knock>>();
 
@@ -25,7 +26,7 @@ async function loadKnockMap(): Promise<Map<number, Knock>> {
 
   try {
     const knocks = z.array(KnockSchema).parse(JSON.parse(json));
-    return new Map(knocks.map((knock) => [knock.problemNo, knock]));
+    return new Map(knocks.map((knock) => [knock.no, knock]));
   } catch (e) {
     logger.error("Failed to load knocks");
     logger.debug(e);
