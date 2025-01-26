@@ -6,6 +6,7 @@ import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
 import { exec } from "./exec.ts";
 import { withContext } from "./context/context.ts";
+import { checkCommand } from "./command/check.ts";
 
 async function main() {
   await exec("docker", ["compose", "up", "-d"]);
@@ -15,6 +16,7 @@ async function main() {
     command
       .command("help", helpCommand({ command }))
       .command("start", startProblemCommand())
+      .command("check", checkCommand())
       .command("exit", exitCommand());
 
     try {

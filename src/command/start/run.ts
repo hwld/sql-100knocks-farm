@@ -1,11 +1,12 @@
 import { buildCommand } from "../../build-command.ts";
 import { getProblemMap } from "../../context/problem-map.ts";
 import { logger } from "../../logger.ts";
-import { executeAnswer } from "../../problem/execute.ts";
 import { writeAnswerResult, writeExpectedResults } from "../../problem/fs.ts";
 import { openProbremResultFiles } from "../../problem/open.ts";
+import { getProblemPath } from "../../problem/path.ts";
 import { isEqualSQLResult } from "../../sql/compare.ts";
 import { parseCsv } from "../../sql/csv.ts";
+import { query } from "../../sql/query.ts";
 
 type Args = { problemNo: number };
 
@@ -18,12 +19,13 @@ export const runProblemCommand = ({ problemNo }: Args) => {
         throw new Error("Failed to load problem");
       }
 
-      const rawAnswer = await executeAnswer(problemNo);
-      if (rawAnswer.isErr()) {
-        logger.error(`${rawAnswer.error}`);
+      const answerSQL = await Deno.readTextFile(getProblemPath(problemNo));
+      const queryResult = await query(answerSQL);
+      if (queryResult.isErr()) {
+        logger.error(`${queryResult.error.msg}`);
         return;
       }
-      const answerResult = rawAnswer.value;
+      const answerResult = queryResult.value;
       await writeAnswerResult({ problemNo, result: answerResult });
 
       const isEqualResults = await Promise.all(

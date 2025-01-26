@@ -12,7 +12,9 @@ export type SQLResult = {
   rows: string[][];
 };
 
-type QueryError = { type: "SQL_EMPTY" } | { type: "UNKNOWN"; msg: string };
+type QueryError =
+  | { type: "SQL_EMPTY"; msg: string }
+  | { type: "UNKNOWN"; msg: string };
 
 export async function query(
   sql: string
@@ -32,7 +34,7 @@ export async function query(
   await tx.rollback();
 
   if (result.command === undefined) {
-    return err({ type: "SQL_EMPTY" });
+    return err({ type: "SQL_EMPTY", msg: "SQL is empty" });
   }
 
   const columns = result.columns;
