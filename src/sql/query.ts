@@ -31,11 +31,23 @@ export async function query(sql: string): Promise<Result<SQLResult, string>> {
     return ok({ columns: [], rows: [[]] });
   }
 
+  // 結果をすべて文字列に変換する
   const rows = result.rows.map((row) => {
     const newRow: string[] = [];
     for (const key in row) {
-      const index = columns.indexOf(key);
-      newRow[index] = String(row[key]);
+      const colIndex = columns.indexOf(key);
+
+      const col = row[key];
+      if (col instanceof Date) {
+        // sql100本ノックではDateはyyyy-mm-ddの形式で保存されているのでとりあえずこのフォーマットに変換してみる
+        // 他に良い解決策が思いつかない・・・
+        const year = col.getFullYear();
+        const month = (col.getMonth() + 1).toString().padStart(2, "0");
+        const day = col.getDate().toString().padStart(2, "0");
+        newRow[colIndex] = `${year}-${month}-${day}`;
+      } else {
+        newRow[colIndex] = `${col}`;
+      }
     }
     return newRow;
   });
