@@ -3,10 +3,10 @@ import { DOMParser, Element } from "@b-fuze/deno-dom";
 import {
   getExpectedDir,
   getExpectedFileName,
+  getKnocksPath,
   getProblemPath,
 } from "../src/problem/path.ts";
 import { withContext } from "../src/context/context.ts";
-import { getConfig } from "../src/context/config.ts";
 
 type KnockElement = {
   problem: Element;
@@ -14,6 +14,7 @@ type KnockElement = {
 };
 
 type Knock = {
+  problemNo: number;
   problem: string;
   solutions: {
     sql: string;
@@ -64,13 +65,16 @@ function parseKnockElements(html: string): KnockElement[] {
 }
 
 function parseKnocks(knockElements: KnockElement[]) {
-  const knocks = knockElements.map((element): Knock => {
+  const knocks = knockElements.map((element, i): Knock => {
     return {
+      problemNo: i + 1,
       problem: element.problem.textContent.trim(),
       solutions: element.solutions.map((solution) => {
         return {
-          sql: solution.querySelector(".jp-Cell-inputWrapper pre")
-            ?.textContent!,
+          sql: solution
+            .querySelector(".jp-Cell-inputWrapper pre")
+            ?.textContent.split("%%sql")[1]
+            .trim()!,
           expectedCsv: tableToCsv(
             solution.querySelector(".jp-Cell-outputWrapper table")
           ),
@@ -111,10 +115,7 @@ async function writeKnockFiles(knocks: Knock[]) {
 }
 
 async function writeKnocksMeta(knocks: Knock[]) {
-  await Deno.writeTextFile(
-    join(getConfig()["100knocksDir"], "knocks.json"),
-    JSON.stringify(knocks)
-  );
+  await Deno.writeTextFile(getKnocksPath(), JSON.stringify(knocks));
 }
 
 function tableToCsv(table: Element | null) {

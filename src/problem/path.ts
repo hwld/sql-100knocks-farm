@@ -38,3 +38,7 @@ export function getExpectedResultPath(expectedPath: string): string {
   path.base = path.name + ".txt";
   return format(path);
 }
+
+export function getKnocksPath(): string {
+  return join(getConfig()["100knocksDir"], "knocks.json");
+}
