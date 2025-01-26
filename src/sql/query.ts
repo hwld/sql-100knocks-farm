@@ -29,6 +29,16 @@ export async function query(
     if (e instanceof TransactionError && e.cause instanceof PostgresError) {
       return err({ type: "UNKNOWN", msg: e.cause.message });
     }
+
+    // 列名が重複すると例外が出ちゃうのでハンドリングする
+    // カスタムエラー型が使われてないので、エラーメッセージを見るしかない？
+    if (
+      e instanceof Error &&
+      // https://github.com/denodrivers/postgres/blob/256fb860ea8d959872421950e6158910e9fe6c0f/query/query.ts#L341
+      e.message.match(/^Field names.*are duplicated in the result of the query/)
+    ) {
+      return err({ type: "UNKNOWN", msg: e.message });
+    }
     throw e;
   }
   await tx.rollback();
