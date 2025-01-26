@@ -11,19 +11,20 @@ import { prevProblemCommand } from "./prev.ts";
 import { moveProblemCommand } from "./mv.ts";
 import { openProblem } from "../../problem/open.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
+import { solutionCommand } from "./solution.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
     .description("Open problem <problemNo>")
     .arguments("<problemNo:number>")
-    .action(async (_, problemNo) => {
-      const result = await openProblem(problemNo);
+    .action(async (_, _problemNo) => {
+      const result = await openProblem(_problemNo);
       if (result.isErr()) {
-        logger.error(`\`Problem ${problemNo}\` is not found`);
+        logger.error(`\`Problem ${_problemNo}\` is not found`);
         return;
       }
 
-      const problemNav = new ProblemNavigator(problemNo);
+      const problemNav = new ProblemNavigator(_problemNo);
 
       while (true) {
         let shouldReturnToMain = false;
@@ -38,13 +39,17 @@ export const startProblemCommand = () => {
             "run",
             runProblemCommand({ problemNo: problemNav.current() })
           )
-          .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
-          .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))
-          .command("mv", moveProblemCommand({ onMove: problemNav.move }))
           .command(
             "open",
             openProblemCommand({ problemNo: problemNav.current() })
           )
+          .command(
+            "solution",
+            solutionCommand({ problemNo: problemNav.current() })
+          )
+          .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
+          .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))
+          .command("mv", moveProblemCommand({ onMove: problemNav.move }))
           .command("..", returnCommand({ onReturn: returnToMain }))
           .command("exit", exitCommand());
 
