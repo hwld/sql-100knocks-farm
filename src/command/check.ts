@@ -4,6 +4,7 @@ import { getProblemPath } from "../problem/path.ts";
 import { isEqualSQLResult } from "../sql/compare.ts";
 import { parseCsv } from "../sql/csv.ts";
 import { query } from "../sql/query.ts";
+import { convertToRanges } from "../utils.ts";
 
 export const checkCommand = () => {
   return buildCommand()
@@ -43,9 +44,18 @@ export const checkCommand = () => {
       }
 
       console.log("");
-      console.log(`%ccorrects: ${correctNums.join(",")}`, "color: green");
-      console.log(`%cincorrects: ${incorrectNums.join(",")}`, "color: red");
-      console.log(`%cununswereds: ${unansweredNums.join(",")}`, "color: gray");
+      console.log(
+        `%ccorrects: ${convertToRanges(correctNums).join(",")}`,
+        "color: green"
+      );
+      console.log(
+        `%cincorrects: ${convertToRanges(incorrectNums).join(",")}`,
+        "color: red"
+      );
+      console.log(
+        `%cununswereds: ${convertToRanges(unansweredNums).join(",")}`,
+        "color: gray"
+      );
       console.log("");
     });
 };
