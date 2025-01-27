@@ -37,10 +37,14 @@ export async function query(
       // https://github.com/denodrivers/postgres/blob/256fb860ea8d959872421950e6158910e9fe6c0f/query/query.ts#L341
       e.message.match(/^Field names.*are duplicated in the result of the query/)
     ) {
+      // TransactionError以外のエラーではトランザクションはロールバックされないっぽいので手動でロールバックする
+      await tx.rollback();
       return err({ type: "UNKNOWN", msg: e.message });
     }
     throw e;
   }
+
+  // postgres側でエラーが出ている場合はすでにrollbackされているので、finallyではなくここでrollbackする。
   await tx.rollback();
 
   if (result.command === undefined) {
