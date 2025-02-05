@@ -12,6 +12,7 @@ import { moveProblemCommand } from "./mv.ts";
 import { openProblem } from "../../problem/open.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
 import { solutionCommand } from "./solution.ts";
+import { expectedCommand } from "./expected.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
@@ -46,6 +47,10 @@ export const startProblemCommand = () => {
           .command(
             "solution",
             solutionCommand({ problemNo: problemNav.current() })
+          )
+          .command(
+            "expected",
+            expectedCommand({ problemNo: problemNav.current() })
           )
           .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
           .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))
