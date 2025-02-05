@@ -3,6 +3,8 @@ import { DOMParser, Element } from "@b-fuze/deno-dom";
 import { getAllProblemsPath, getProblemPath } from "../src/problem/path.ts";
 import { withConfigContext } from "../src/context/config.ts";
 import { Problem } from "../src/problem/problem.ts";
+import { writeExpectedResults } from "../src/problem/fs.ts";
+import { parseCsv } from "../src/sql/csv.ts";
 
 type ProblemElement = {
   problemText: Element;
@@ -84,7 +86,20 @@ async function writeProblemFiles(problems: Problem[]) {
     const problemPath = getProblemPath(problemNo);
     const problemDir = join(problemPath, "..");
     await Deno.mkdir(problemDir, { recursive: true });
+
+    // 問題文ファイルの生成
     await Deno.writeTextFile(problemPath, `/*\n  ${problem.text}\n*/`);
+
+    // 期待するテーブルファイルの生成
+    await Promise.all(
+      problem.solutions.map((solution) => {
+        return writeExpectedResults({
+          problemNo,
+          solutionNo: solution.no,
+          result: parseCsv(solution.expectedCsv),
+        });
+      })
+    );
   });
 
   await Promise.all(promisesToWriteProblems);
