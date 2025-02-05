@@ -5,7 +5,7 @@ type Args = { problemNo: number };
 
 export const solutionCommand = ({ problemNo }: Args) => {
   return buildCommand()
-    .description(`Show solution for \`problem ${problemNo}\``)
+    .description("Show solution")
     .action(() => {
       const problem = getProblemMap().get(problemNo);
 

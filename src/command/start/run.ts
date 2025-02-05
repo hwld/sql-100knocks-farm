@@ -12,7 +12,7 @@ type Args = { problemNo: number };
 
 export const runProblemCommand = ({ problemNo }: Args) => {
   return buildCommand()
-    .description(`Run \`problem ${problemNo}\``)
+    .description("Run problem")
     .action(async () => {
       const problem = getProblemMap().get(problemNo);
       if (!problem) {
