@@ -74,9 +74,9 @@ function parseProblems(problemElements: ProblemElement[]) {
   });
 
   /**
-   * 1 ~ 79問までは上のロジックで対応できると思うけど、それ以降の問題は一つ問題につき1度のSQL実行とは限らないので対応できない
+   * 1 ~ 74問まで対応させる
    */
-  return problems.slice(0, 79);
+  return problems.slice(0, 74);
 }
 
 async function writeProblemFiles(problems: Problem[]) {
