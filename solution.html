@@ -20569,7 +20569,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-036: レシート明細データ（receipt）と店舗データ（store）を内部結合し、レシート明細データの全項目と店舗データの店舗名（store_name）を10件表示せよ。</p>
+<p>S-036: レシート明細データ（receipt）と店舗データ（store）を店舗コード(store_cd)で内部結合し、レシート明細データの全項目と店舗データの店舗名（store_name）を10件表示せよ。</p>
 </blockquote>
 
 </div>
@@ -20780,7 +20780,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-037: 商品データ（product）とカテゴリデータ（category）を内部結合し、商品データの全項目とカテゴリデータのカテゴリ小区分名（category_small_name）を10件表示せよ。</p>
+<p>S-037: 商品データ（product）とカテゴリデータ（category）をカテゴリ小区分コード(category_small_cd)で内部結合し、商品データの全項目とカテゴリデータのカテゴリ小区分名（category_small_name）を10件表示せよ。</p>
 </blockquote>
 
 </div>
@@ -20958,7 +20958,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-038: 顧客データ（customer）とレシート明細データ（receipt）から、顧客ごとの売上金額合計を求め、10件表示せよ。ただし、売上実績がない顧客については売上金額を0として表示させること。また、顧客は性別コード（gender_cd）が女性（1）であるものを対象とし、非会員（顧客IDが&quot;Z&quot;から始まるもの）は除外すること。</p>
+<p>S-038: 顧客データ（customer）とレシート明細データ（receipt）から、顧客ごとの売上金額合計を求め、売上合計金額の降順、顧客IDの昇順で10件表示せよ。ただし、売上実績がない顧客については売上金額を0として表示させること。また、顧客は性別コード（gender_cd）が女性（1）であるものを対象とし、非会員（顧客IDが&quot;Z&quot;から始まるもの）は除外すること。</p>
 </blockquote>
 
 </div>
@@ -20992,11 +20992,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="p">)</span>
 <span class="k">SELECT</span>
 <span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="p">,</span>
-<span class="w">    </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">sum_amount</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">sum_amount</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">) as sum_amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customer_data</span><span class="w"> </span><span class="k">c</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">OUTER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_amount</span><span class="w"> </span><span class="n">a</span>
 <span class="k">ON</span>
 <span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">customer_id</span>
+<span>ORDER BY sum_amount DESC, customer_id</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
 <span class="p">;</span>
 </pre></div>
@@ -21038,46 +21039,46 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>CS021313000114</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>CS031415000172</td>
-            <td>5088</td>
-        </tr>
-        <tr>
-            <td>CS028811000001</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>CS001215000145</td>
-            <td>875</td>
-        </tr>
-        <tr>
-            <td>CS015414000103</td>
-            <td>3122</td>
-        </tr>
-        <tr>
-            <td>CS033513000180</td>
-            <td>868</td>
-        </tr>
-        <tr>
-            <td>CS035614000014</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>CS011215000048</td>
-            <td>3444</td>
-        </tr>
-        <tr>
-            <td>CS009413000079</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>CS040412000191</td>
-            <td>210</td>
-        </tr>
+      <tr>
+        <td>CS017415000097</td>
+        <td>23086</td>
+      </tr>
+      <tr>
+        <td>CS015415000185</td>
+        <td>20153</td>
+      </tr>
+      <tr>
+        <td>CS031414000051</td>
+        <td>19202</td>
+      </tr>
+      <tr>
+        <td>CS028415000007</td>
+        <td>19127</td>
+      </tr>
+      <tr>
+        <td>CS010214000010</td>
+        <td>18585</td>
+      </tr>
+      <tr>
+        <td>CS006515000023</td>
+        <td>18372</td>
+      </tr>
+      <tr>
+        <td>CS016415000141</td>
+        <td>18372</td>
+      </tr>
+      <tr>
+        <td>CS011414000106</td>
+        <td>18338</td>
+      </tr>
+      <tr>
+        <td>CS038415000104</td>
+        <td>17847</td>
+      </tr>
+      <tr>
+        <td>CS035414000024</td>
+        <td>17615</td>
+      </tr>
     </tbody>
 </table>
 </div>
@@ -24113,11 +24114,6 @@ Done.
 <span class="w">    </span><span class="n">LEAST</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="n">TRUNC</span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">era</span>
 <span class="k">FROM</span>
 <span class="w">    </span><span class="n">customer</span>
-<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span>
-<span class="w">    </span><span class="n">customer_id</span><span class="p">,</span>
-<span class="w">    </span><span class="n">birth_day</span>
-<span class="c1">-- 確認用の条件</span>
-<span class="c1">-- HAVING LEAST(CAST(TRUNC(age / 10) * 10 AS INTEGER), 60) &gt;= 60</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
 <span class="p">;</span>
 </pre></div>
@@ -24160,56 +24156,56 @@ Done.
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>CS001105000001</td>
-            <td>2000-01-14</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000009</td>
-            <td>2006-08-24</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000019</td>
-            <td>2001-01-31</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000021</td>
-            <td>2001-12-15</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000023</td>
-            <td>2004-01-26</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000024</td>
-            <td>2001-01-16</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000029</td>
-            <td>2005-01-24</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001112000030</td>
-            <td>2003-03-02</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001113000004</td>
-            <td>2003-02-22</td>
-            <td>10</td>
-        </tr>
-        <tr>
-            <td>CS001113000010</td>
-            <td>2005-05-09</td>
-            <td>10</td>
-        </tr>
+      <tr>
+        <td>CS021313000114</td>
+        <td>1981-04-29</td>
+        <td>30</td>
+      </tr>
+      <tr>
+        <td>CS037613000071</td>
+        <td>1952-04-01</td>
+        <td>60</td>
+      </tr>
+      <tr>
+        <td>CS031415000172</td>
+        <td>1976-10-04</td>
+        <td>40</td>
+      </tr>
+      <tr>
+        <td>CS028811000001</td>
+        <td>1933-03-27</td>
+        <td>60</td>
+      </tr>
+      <tr>
+        <td>CS001215000145</td>
+        <td>1995-03-29</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td>CS020401000016</td>
+        <td>1974-09-15</td>
+        <td>40</td>
+      </tr>
+      <tr>
+        <td>CS015414000103</td>
+        <td>1977-08-09</td>
+        <td>40</td>
+      </tr>
+      <tr>
+        <td>CS029403000008</td>
+        <td>1973-08-17</td>
+        <td>40</td>
+      </tr>
+      <tr>
+        <td>CS015804000004</td>
+        <td>1931-05-02</td>
+        <td>60</td>
+      </tr>
+      <tr>
+        <td>CS033513000180</td>
+        <td>1962-07-11</td>
+        <td>50</td>
+      </tr>
     </tbody>
 </table>
 </div>
@@ -24230,6 +24226,8 @@ Done.
 <hr />
 <blockquote>
 <p>S-057: 056の抽出結果と性別コード（gender_cd）により、新たに性別×年代の組み合わせを表すカテゴリデータを作成し、10件表示せよ。組み合わせを表すカテゴリの値はgender_cdと年代を組み合わせた文字列(例: 030)とする。</p>
+<p></p>
+<p>  S-056: 顧客データ（customer）の年齢（age）をもとに10歳刻みで年代を算出し、顧客ID（customer_id）、生年月日（birth_day）とともに10件表示せよ。ただし、60歳以上は全て60歳代とすること。年代を表すカテゴリ名は任意とする。</p>
 </blockquote>
 
 </div>
@@ -24252,9 +24250,6 @@ Done.
 <span class="w">    </span><span class="n">gender_cd</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">TO_CHAR</span><span class="p">(</span><span class="n">LEAST</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="n">TRUNC</span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="mi">60</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;FM00&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">gender_era</span>
 <span class="k">FROM</span>
 <span class="w">    </span><span class="n">customer</span>
-<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span>
-<span class="w">    </span><span class="n">customer_id</span><span class="p">,</span>
-<span class="w">    </span><span class="n">birth_day</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span>
 <span class="p">;</span>
 </pre></div>
@@ -24297,56 +24292,56 @@ Done.
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>CS001105000001</td>
-            <td>2000-01-14</td>
-            <td>010</td>
-        </tr>
-        <tr>
-            <td>CS001112000009</td>
-            <td>2006-08-24</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000019</td>
-            <td>2001-01-31</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000021</td>
-            <td>2001-12-15</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000023</td>
-            <td>2004-01-26</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000024</td>
-            <td>2001-01-16</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000029</td>
-            <td>2005-01-24</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001112000030</td>
-            <td>2003-03-02</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001113000004</td>
-            <td>2003-02-22</td>
-            <td>110</td>
-        </tr>
-        <tr>
-            <td>CS001113000010</td>
-            <td>2005-05-09</td>
-            <td>110</td>
-        </tr>
+      <tr>
+        <td>CS021313000114</td>
+        <td>1981-04-29</td>
+        <td>130</td>
+      </tr>
+      <tr>
+        <td>CS037613000071</td>
+        <td>1952-04-01</td>
+        <td>960</td>
+      </tr>
+      <tr>
+        <td>CS031415000172</td>
+        <td>1976-10-04</td>
+        <td>140</td>
+      </tr>
+      <tr>
+        <td>CS028811000001</td>
+        <td>1933-03-27</td>
+        <td>160</td>
+      </tr>
+      <tr>
+        <td>CS001215000145</td>
+        <td>1995-03-29</td>
+        <td>120</td>
+      </tr>
+      <tr>
+        <td>CS020401000016</td>
+        <td>1974-09-15</td>
+        <td>040</td>
+      </tr>
+      <tr>
+        <td>CS015414000103</td>
+        <td>1977-08-09</td>
+        <td>140</td>
+      </tr>
+      <tr>
+        <td>CS029403000008</td>
+        <td>1973-08-17</td>
+        <td>040</td>
+      </tr>
+      <tr>
+        <td>CS015804000004</td>
+        <td>1931-05-02</td>
+        <td>060</td>
+      </tr>
+      <tr>
+        <td>CS033513000180</td>
+        <td>1962-07-11</td>
+        <td>150</td>
+      </tr>
     </tbody>
 </table>
 </div>
@@ -24954,7 +24949,7 @@ Done.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-061: レシート明細データ（receipt）の売上金額（amount）を顧客ID（customer_id）ごとに合計し、売上金額合計を常用対数化（底10）して顧客ID、売上金額合計とともに10件表示せよ。ただし、顧客IDが&quot;Z&quot;から始まるのものは非会員を表すため、除外して計算すること。</p>
+<p>S-061: レシート明細データ（receipt）の売上金額（amount）を顧客ID（customer_id）ごとに合計し、売上金額合計に0.5を加えたうえで常用対数化（底10）して顧客ID、売上金額合計とともに10件表示せよ。ただし、顧客IDが&quot;Z&quot;から始まるのものは非会員を表すため、除外して計算すること。</p>
 </blockquote>
 
 </div>
@@ -25097,7 +25092,7 @@ Done.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-062: レシート明細データ（receipt）の売上金額（amount）を顧客ID（customer_id）ごとに合計し、売上金額合計を自然対数化（底e）して顧客ID、売上金額合計とともに10件表示せよ。ただし、顧客IDが&quot;Z&quot;から始まるのものは非会員を表すため、除外して計算すること。</p>
+<p>S-062: レシート明細データ（receipt）の売上金額（amount）を顧客ID（customer_id）ごとに合計し、売上金額合計に0.5を加えたうえで自然対数化（底e）して顧客ID、売上金額合計とともに10件表示せよ。ただし、顧客IDが&quot;Z&quot;から始まるのものは非会員を表すため、除外して計算すること。</p>
 </blockquote>
 
 </div>
@@ -26089,7 +26084,7 @@ Done.
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <hr />
 <blockquote>
-<p>S-069: レシート明細データ（receipt）と商品データ（product）を結合し、顧客毎に全商品の売上金額合計と、カテゴリ大区分コード（category_major_cd）が&quot;07&quot;（瓶詰缶詰）の売上金額合計を計算の上、両者の比率を求めよ。抽出対象はカテゴリ大区分コード&quot;07&quot;（瓶詰缶詰）の売上実績がある顧客のみとし、結果を10件表示せよ。</p>
+<p>S-069: レシート明細データ（receipt）と商品データ（product）を商品コード(product_cd)で結合し、顧客毎に全商品の売上金額合計と、カテゴリ大区分コード（category_major_cd）が&quot;07&quot;（瓶詰缶詰）の売上金額合計を計算の上、両者の比率を求めよ。抽出対象はカテゴリ大区分コード&quot;07&quot;（瓶詰缶詰）の売上実績がある顧客のみとし、結果を10件表示せよ。</p>
 </blockquote>
 
 </div>
