@@ -13,6 +13,7 @@ import { openProblem } from "../../problem/open.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
 import { solutionCommand } from "./solution.ts";
 import { expectedCommand } from "./expected.ts";
+import { getProblemMap } from "../../context/problem-map.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
@@ -25,7 +26,10 @@ export const startProblemCommand = () => {
         return;
       }
 
-      const problemNav = new ProblemNavigator(_problemNo);
+      const allProblemNoList = [...getProblemMap().keys()].toSorted(
+        (a, b) => a - b
+      );
+      const problemNav = new ProblemNavigator(allProblemNoList, _problemNo);
 
       while (true) {
         let shouldReturnToMain = false;

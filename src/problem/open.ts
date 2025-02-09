@@ -8,6 +8,7 @@ import { getProblemPath } from "./path.ts";
 import { Problem } from "./problem.ts";
 
 export async function openProblem(no: number): Promise<Result<null, null>> {
+  // TODO: 今はProblemMapがあるから事前に問題の有無は区別できるので、Problempathが存在しないときには例外を出したい
   const path = getProblemPath(no);
   if (!stat(path)?.isFile) {
     return err(null);
