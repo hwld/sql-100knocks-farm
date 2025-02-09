@@ -1,11 +1,12 @@
 import { buildCommand } from "../../build-command.ts";
+import { ProblemNavigator } from "../../problem/navigator.ts";
 
-type Args = { onPrev: () => Promise<void> };
+type Args = { problemNav: ProblemNavigator };
 
-export const prevProblemCommand = ({ onPrev }: Args) => {
+export const prevProblemCommand = ({ problemNav }: Args) => {
   return buildCommand()
     .description("Previous problem")
     .action(async () => {
-      await onPrev();
+      await problemNav.movePrev();
     });
 };

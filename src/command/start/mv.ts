@@ -1,12 +1,15 @@
 import { buildCommand } from "../../build-command.ts";
+import { ProblemNavigator } from "../../problem/navigator.ts";
 
-type Args = { onMove: (problemNo: number) => Promise<void> };
+type Args = {
+  problemNav: ProblemNavigator;
+};
 
-export const moveProblemCommand = ({ onMove }: Args) => {
+export const moveProblemCommand = ({ problemNav }: Args) => {
   return buildCommand()
     .description("Move to problem <problemNo>")
     .arguments("<problemNo:number>")
     .action(async (_, problemNo) => {
-      await onMove(problemNo);
+      await problemNav.move(problemNo);
     });
 };

@@ -1,15 +1,17 @@
 import { buildCommand } from "../../build-command.ts";
 import { getProblemMap } from "../../context/problem-map.ts";
+import { ProblemNavigator } from "../../problem/navigator.ts";
 import { parseCsv } from "../../sql/csv.ts";
 import { formatSQLResult } from "../../sql/format.ts";
 import { SQLResult } from "../../sql/query.ts";
 
-type Args = { problemNo: number };
+type Args = { problemNav: ProblemNavigator };
 
-export const expectedCommand = ({ problemNo }: Args) => {
+export const expectedCommand = ({ problemNav }: Args) => {
   return buildCommand()
     .description("Show expected table's column name and the first row")
     .action(() => {
+      const problemNo = problemNav.current();
       const problem = getProblemMap().get(problemNo);
 
       problem?.solutions.forEach((solution) => {

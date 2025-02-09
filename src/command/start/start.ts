@@ -36,25 +36,13 @@ export const startProblemCommand = () => {
         const command = buildCommand();
         command
           .command("help", helpCommand({ command }))
-          .command(
-            "run",
-            runProblemCommand({ problemNo: problemNav.current() })
-          )
-          .command(
-            "open",
-            openProblemCommand({ problemNo: problemNav.current() })
-          )
-          .command(
-            "solution",
-            solutionCommand({ problemNo: problemNav.current() })
-          )
-          .command(
-            "expected",
-            expectedCommand({ problemNo: problemNav.current() })
-          )
-          .command("next", nextProblemCommand({ onNext: problemNav.moveNext }))
-          .command("prev", prevProblemCommand({ onPrev: problemNav.movePrev }))
-          .command("mv", moveProblemCommand({ onMove: problemNav.move }))
+          .command("run", runProblemCommand({ problemNav }))
+          .command("open", openProblemCommand({ problemNav }))
+          .command("solution", solutionCommand({ problemNav }))
+          .command("expected", expectedCommand({ problemNav }))
+          .command("next", nextProblemCommand({ problemNav }))
+          .command("prev", prevProblemCommand({ problemNav }))
+          .command("mv", moveProblemCommand({ problemNav }))
           .command("..", returnCommand({ onReturn: returnToMain }))
           .command("exit", exitCommand());
 
