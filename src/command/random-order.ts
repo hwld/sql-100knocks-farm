@@ -1,4 +1,3 @@
-import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "../build-command.ts";
 import { ProblemNavigator } from "../problem/navigator.ts";
 import { loadProblemStatuses } from "../problem/status.ts";
@@ -15,6 +14,7 @@ import { returnCommand } from "./return.ts";
 import { exitCommand } from "./exit.ts";
 import { openProblem } from "../problem/open.ts";
 import { green } from "@std/fmt/colors";
+import { executeCommand } from "./execute-command.ts";
 
 export const randomOrderCommand = () => {
   return buildCommand()
@@ -51,25 +51,13 @@ export const randomOrderCommand = () => {
           .command("..", returnCommand({ onReturn: returnToMain }))
           .command("exit", exitCommand());
 
-        try {
-          const line = prompt(`skf/rand/${problemNav.current()}>`)?.split(" ");
-          if (!line) {
-            continue;
-          }
+        await executeCommand({
+          command,
+          promptMessage: `skf/rand/${problemNav.current()}>`,
+        });
 
-          await command.parse(line);
-
-          if (shouldReturnToMain) {
-            return;
-          }
-        } catch (e) {
-          if (e instanceof ValidationError) {
-            command.showHelp();
-            logger.error(e.message);
-          } else {
-            logger.error(e);
-            Deno.exit(1);
-          }
+        if (shouldReturnToMain) {
+          return;
         }
       }
     });

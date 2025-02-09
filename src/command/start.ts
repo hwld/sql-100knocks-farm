@@ -1,4 +1,3 @@
-import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "../build-command.ts";
 import { logger } from "../logger.ts";
 import { runProblemCommand } from "./run.ts";
@@ -14,6 +13,7 @@ import { ProblemNavigator } from "../problem/navigator.ts";
 import { solutionCommand } from "./solution.ts";
 import { expectedCommand } from "./expected.ts";
 import { getProblemMap } from "../context/problem-map.ts";
+import { executeCommand } from "./execute-command.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
@@ -52,25 +52,13 @@ export const startProblemCommand = () => {
           .command("..", returnCommand({ onReturn: returnToMain }))
           .command("exit", exitCommand());
 
-        try {
-          const line = prompt(`skf/start/${problemNav.current()}>`)?.split(" ");
-          if (!line) {
-            continue;
-          }
+        await executeCommand({
+          command,
+          promptMessage: `skf/start/${problemNav.current()}>`,
+        });
 
-          await command.parse(line);
-
-          if (shouldReturnToMain) {
-            return;
-          }
-        } catch (e) {
-          if (e instanceof ValidationError) {
-            command.showHelp();
-            logger.error(e.message);
-          } else {
-            logger.error(e);
-            Deno.exit(1);
-          }
+        if (shouldReturnToMain) {
+          return;
         }
       }
     });

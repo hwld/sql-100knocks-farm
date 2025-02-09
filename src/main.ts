@@ -1,5 +1,3 @@
-import { logger } from "./logger.ts";
-import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "./build-command.ts";
 import { startProblemCommand } from "./command/start.ts";
 import { helpCommand } from "./command/help.ts";
@@ -8,6 +6,7 @@ import { exec } from "./exec.ts";
 import { withContext } from "./context/context.ts";
 import { checkCommand } from "./command/check.ts";
 import { randomOrderCommand } from "./command/random-order.ts";
+import { executeCommand } from "./command/execute-command.ts";
 
 async function main() {
   await exec("docker", ["compose", "up", "-d"]);
@@ -21,22 +20,7 @@ async function main() {
       .command("check", checkCommand())
       .command("exit", exitCommand());
 
-    try {
-      const line = prompt("skf>")?.split(" ");
-      if (!line) {
-        continue;
-      }
-
-      await command.parse(line);
-    } catch (e) {
-      if (e instanceof ValidationError) {
-        command.showHelp();
-        logger.error(e.message);
-      } else {
-        logger.error(e);
-        Deno.exit(1);
-      }
-    }
+    await executeCommand({ command, promptMessage: "skf>" });
   }
 }
 
