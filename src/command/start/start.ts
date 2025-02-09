@@ -20,11 +20,12 @@ export const startProblemCommand = () => {
     .description("Open problem <problemNo>")
     .arguments("<problemNo:number>")
     .action(async (_, _problemNo) => {
-      const result = await openProblem(_problemNo);
-      if (result.isErr()) {
-        logger.error(`\`Problem ${_problemNo}\` is not found`);
+      if (!getProblemMap().has(_problemNo)) {
+        logger.error(`Problem '${_problemNo}' is not found`);
         return;
       }
+
+      await openProblem(_problemNo);
 
       const allProblemNoList = getProblemMap().getOrderedProblemNoList();
       const problemNav = new ProblemNavigator(allProblemNoList, _problemNo);

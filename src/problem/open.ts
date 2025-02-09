@@ -1,21 +1,12 @@
 import { getConfig } from "../context/config.ts";
 import { exec } from "../exec.ts";
-import { stat } from "../fs.ts";
-import { err, ok, Result } from "../result.ts";
 import { getProblemResultPath } from "./path.ts";
 import { getExpectedResultPath } from "./path.ts";
 import { getProblemPath } from "./path.ts";
 import { Problem } from "./problem.ts";
 
-export async function openProblem(no: number): Promise<Result<null, null>> {
-  // TODO: 今はProblemMapがあるから事前に問題の有無は区別できるので、Problempathが存在しないときには例外を出したい
-  const path = getProblemPath(no);
-  if (!stat(path)?.isFile) {
-    return err(null);
-  }
-
+export async function openProblem(no: number) {
   await exec(getConfig().editorCommand, [getProblemPath(no)]);
-  return ok(null);
 }
 
 export async function openProbremResultFiles(problem: Problem) {

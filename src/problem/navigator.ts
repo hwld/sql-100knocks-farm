@@ -1,5 +1,5 @@
+import { Err } from "neverthrow";
 import { logger } from "../logger.ts";
-import { err, ok, Result } from "../result.ts";
 import { openProblem } from "./open.ts";
 
 export class ProblemNavigator {
@@ -31,10 +31,7 @@ export class ProblemNavigator {
       return;
     }
 
-    const result = await this.#_move(index);
-    if (result.isErr()) {
-      logger.error(`Problem ${problemNo} does not exist`);
-    }
+    await this.#_move(index);
   };
 
   moveNext = async () => {
@@ -48,10 +45,7 @@ export class ProblemNavigator {
       return;
     }
 
-    const result = await this.#_move(nextIndex);
-    if (result.isErr()) {
-      logger.error("The next problem does not exist");
-    }
+    await this.#_move(nextIndex);
   };
 
   movePrev = async () => {
@@ -62,22 +56,16 @@ export class ProblemNavigator {
       return;
     }
 
-    const result = await this.#_move(prevIndex);
-    if (result.isErr()) {
-      logger.error("The previous problem does not exist");
-    }
+    await this.#_move(prevIndex);
   };
 
-  // TODO: 問題の有無は事前にチェックしたいので、Resultにしないでエラーは例外で出したい
-  #_move = async (problemIndex: number): Promise<Result<null, null>> => {
+  #_move = async (problemIndex: number) => {
     const problemNo = this.#problemNoList[problemIndex];
-
-    const result = await openProblem(problemNo);
-    if (result.isErr()) {
-      return err(null);
+    if (!problemNo) {
+      throw new Err("problemNo must exist in the list");
     }
 
+    await openProblem(problemNo);
     this.#currentIndex = problemIndex;
-    return ok(null);
   };
 }
