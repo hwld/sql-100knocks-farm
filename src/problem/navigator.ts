@@ -1,6 +1,7 @@
 import { Err } from "neverthrow";
 import { logger } from "../logger.ts";
 import { openProblem } from "./open.ts";
+import { green } from "@std/fmt/colors";
 
 export class ProblemNavigator {
   #problemNoList: number[];
@@ -38,10 +39,7 @@ export class ProblemNavigator {
     const nextIndex = this.#currentIndex + 1;
 
     if (nextIndex >= this.#problemNoList.length) {
-      console.log(
-        "%cNo more problems. You've reached the end!",
-        "color: green"
-      );
+      logger.info(green("No more problems. You've reached the end!"));
       return;
     }
 
@@ -52,7 +50,7 @@ export class ProblemNavigator {
     const prevIndex = this.#currentIndex - 1;
 
     if (prevIndex < 0) {
-      console.log("%cThis is the first problem!", "color: green");
+      logger.info(green("This is the first problem!"));
       return;
     }
 

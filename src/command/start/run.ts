@@ -1,3 +1,4 @@
+import { green, red } from "@std/fmt/colors";
 import { buildCommand } from "../../build-command.ts";
 import { getProblemMap } from "../../context/problem-map.ts";
 import { logger } from "../../logger.ts";
@@ -44,11 +45,11 @@ export const runProblemCommand = ({ problemNav }: Args) => {
       );
 
       if (isEqualResults.includes(true)) {
-        console.log("%cSuccess", "color: green");
+        logger.info(green("Success"));
         return;
       }
 
-      console.log("%cFailed", "color: red");
+      logger.info(red("Failed"));
       await openProbremResultFiles(problem);
     });
 };

@@ -1,5 +1,7 @@
+import { green } from "@std/fmt/colors";
 import { buildCommand } from "../../build-command.ts";
 import { getProblemMap } from "../../context/problem-map.ts";
+import { logger } from "../../logger.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
 import { parseCsv } from "../../sql/csv.ts";
 import { formatSQLResult } from "../../sql/format.ts";
@@ -23,8 +25,7 @@ export const expectedCommand = ({ problemNav }: Args) => {
           rows: expected.rows.slice(0, 1),
         };
 
-        console.log(`%c\n${formatSQLResult(sample)}`, "color: green");
-        console.log();
+        logger.info(green(`\n${formatSQLResult(sample)}\n`));
       });
     });
 };

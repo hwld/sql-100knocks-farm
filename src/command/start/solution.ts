@@ -1,5 +1,7 @@
+import { green } from "@std/fmt/colors";
 import { buildCommand } from "../../build-command.ts";
 import { getProblemMap } from "../../context/problem-map.ts";
+import { logger } from "../../logger.ts";
 import { ProblemNavigator } from "../../problem/navigator.ts";
 
 type Args = { problemNav: ProblemNavigator };
@@ -12,8 +14,8 @@ export const solutionCommand = ({ problemNav }: Args) => {
       const problem = getProblemMap().get(problemNo);
 
       problem?.solutions.forEach((solution) => {
-        console.log(`%c\n${solution.sql}`, "color: green");
+        logger.info(green(`\n${solution.sql}`));
       });
-      console.log();
+      logger.info("");
     });
 };

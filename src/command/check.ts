@@ -1,5 +1,7 @@
+import { gray, green, red } from "@std/fmt/colors";
 import { buildCommand } from "../build-command.ts";
 import { getProblemMap } from "../context/problem-map.ts";
+import { logger } from "../logger.ts";
 import { getProblemPath } from "../problem/path.ts";
 import { isEqualSQLResult } from "../sql/compare.ts";
 import { parseCsv } from "../sql/csv.ts";
@@ -43,19 +45,14 @@ export const checkCommand = () => {
         }
       }
 
-      console.log("");
-      console.log(
-        `%ccorrects: ${convertToRanges(correctNums).join(",")}`,
-        "color: green"
+      logger.info("");
+      logger.info(green(`corrects: ${convertToRanges(correctNums).join(",")}`));
+      logger.info(
+        red(`incorrects: ${convertToRanges(incorrectNums).join(",")}`)
       );
-      console.log(
-        `%cincorrects: ${convertToRanges(incorrectNums).join(",")}`,
-        "color: red"
+      logger.info(
+        gray(`ununswereds: ${convertToRanges(unansweredNums).join(",")}`)
       );
-      console.log(
-        `%cununswereds: ${convertToRanges(unansweredNums).join(",")}`,
-        "color: gray"
-      );
-      console.log("");
+      logger.info("");
     });
 };
