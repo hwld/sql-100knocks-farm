@@ -10,7 +10,7 @@ export const checkCommand = () => {
   return buildCommand()
     .description("Check correct, incorrect, and unanswered problems")
     .action(async () => {
-      const allProblems = [...getProblemMap().values()];
+      const allProblems = getProblemMap().getAll();
 
       const correctNums: number[] = [];
       const incorrectNums: number[] = [];

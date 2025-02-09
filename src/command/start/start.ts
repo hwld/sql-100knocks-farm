@@ -26,9 +26,7 @@ export const startProblemCommand = () => {
         return;
       }
 
-      const allProblemNoList = [...getProblemMap().keys()].toSorted(
-        (a, b) => a - b
-      );
+      const allProblemNoList = getProblemMap().getOrderedProblemNoList();
       const problemNav = new ProblemNavigator(allProblemNoList, _problemNo);
 
       while (true) {
