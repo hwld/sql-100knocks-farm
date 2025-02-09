@@ -1,11 +1,11 @@
 import { green } from "@std/fmt/colors";
-import { buildCommand } from "../../build-command.ts";
-import { getProblemMap } from "../../context/problem-map.ts";
-import { logger } from "../../logger.ts";
-import { ProblemNavigator } from "../../problem/navigator.ts";
-import { parseCsv } from "../../sql/csv.ts";
-import { formatSQLResult } from "../../sql/format.ts";
-import { SQLResult } from "../../sql/query.ts";
+import { buildCommand } from "../build-command.ts";
+import { getProblemMap } from "../context/problem-map.ts";
+import { logger } from "../logger.ts";
+import { ProblemNavigator } from "../problem/navigator.ts";
+import { parseCsv } from "../sql/csv.ts";
+import { formatSQLResult } from "../sql/format.ts";
+import { SQLResult } from "../sql/query.ts";
 
 type Args = { problemNav: ProblemNavigator };
 

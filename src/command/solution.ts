@@ -1,8 +1,8 @@
 import { green } from "@std/fmt/colors";
-import { buildCommand } from "../../build-command.ts";
-import { getProblemMap } from "../../context/problem-map.ts";
-import { logger } from "../../logger.ts";
-import { ProblemNavigator } from "../../problem/navigator.ts";
+import { buildCommand } from "../build-command.ts";
+import { getProblemMap } from "../context/problem-map.ts";
+import { logger } from "../logger.ts";
+import { ProblemNavigator } from "../problem/navigator.ts";
 
 type Args = { problemNav: ProblemNavigator };
 

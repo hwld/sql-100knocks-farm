@@ -1,23 +1,23 @@
 import { ValidationError } from "@cliffy/command";
-import { buildCommand } from "../../build-command.ts";
-import { logger } from "../../logger.ts";
+import { buildCommand } from "../build-command.ts";
+import { logger } from "../logger.ts";
 import { runProblemCommand } from "./run.ts";
-import { helpCommand } from "../help.ts";
-import { exitCommand } from "../exit.ts";
+import { helpCommand } from "./help.ts";
+import { exitCommand } from "./exit.ts";
 import { openProblemCommand } from "./open.ts";
 import { returnCommand } from "./return.ts";
 import { nextProblemCommand } from "./next.ts";
 import { prevProblemCommand } from "./prev.ts";
 import { moveProblemCommand } from "./mv.ts";
-import { openProblem } from "../../problem/open.ts";
-import { ProblemNavigator } from "../../problem/navigator.ts";
+import { openProblem } from "../problem/open.ts";
+import { ProblemNavigator } from "../problem/navigator.ts";
 import { solutionCommand } from "./solution.ts";
 import { expectedCommand } from "./expected.ts";
-import { getProblemMap } from "../../context/problem-map.ts";
+import { getProblemMap } from "../context/problem-map.ts";
 
 export const startProblemCommand = () => {
   return buildCommand()
-    .description("Open problem <problemNo>")
+    .description("Start problem <problemNo>")
     .arguments("<problemNo:number>")
     .action(async (_, _problemNo) => {
       if (!getProblemMap().has(_problemNo)) {
@@ -50,7 +50,7 @@ export const startProblemCommand = () => {
           .command("exit", exitCommand());
 
         try {
-          const line = prompt(`skf/${problemNav.current()}>`)?.split(" ");
+          const line = prompt(`skf/start/${problemNav.current()}>`)?.split(" ");
           if (!line) {
             continue;
           }

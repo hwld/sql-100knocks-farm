@@ -11,10 +11,14 @@ export class ProblemNavigator {
    * @param problemNoList
    * @param currentProblemNo 現在のProblemNoを、problemNoListの中から選ぶ
    */
-  constructor(problemNoList: number[], currentProblemNo: number) {
-    const currentIndex = problemNoList.indexOf(currentProblemNo);
-    if (currentIndex === -1) {
-      throw new Error("currentProblemNo must exist in the list");
+  constructor(problemNoList: number[], currentProblemNo?: number) {
+    let currentIndex = 0;
+
+    if (currentProblemNo) {
+      currentIndex = problemNoList.indexOf(currentProblemNo);
+      if (currentIndex === -1) {
+        throw new Error("currentProblemNo must exist in the list");
+      }
     }
 
     this.#problemNoList = problemNoList;

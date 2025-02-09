@@ -1,14 +1,14 @@
 import { green, red } from "@std/fmt/colors";
-import { buildCommand } from "../../build-command.ts";
-import { getProblemMap } from "../../context/problem-map.ts";
-import { logger } from "../../logger.ts";
-import { writeAnswerResult, writeExpectedResults } from "../../problem/fs.ts";
-import { ProblemNavigator } from "../../problem/navigator.ts";
-import { openProbremResultFiles } from "../../problem/open.ts";
-import { getProblemPath } from "../../problem/path.ts";
-import { isEqualSQLResult } from "../../sql/compare.ts";
-import { parseCsv } from "../../sql/csv.ts";
-import { query } from "../../sql/query.ts";
+import { buildCommand } from "../build-command.ts";
+import { getProblemMap } from "../context/problem-map.ts";
+import { logger } from "../logger.ts";
+import { writeAnswerResult, writeExpectedResults } from "../problem/fs.ts";
+import { ProblemNavigator } from "../problem/navigator.ts";
+import { openProbremResultFiles } from "../problem/open.ts";
+import { getProblemPath } from "../problem/path.ts";
+import { isEqualSQLResult } from "../sql/compare.ts";
+import { parseCsv } from "../sql/csv.ts";
+import { query } from "../sql/query.ts";
 
 type Args = { problemNav: ProblemNavigator };
 

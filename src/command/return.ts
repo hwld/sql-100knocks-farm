@@ -1,4 +1,4 @@
-import { buildCommand } from "../../build-command.ts";
+import { buildCommand } from "../build-command.ts";
 
 type Args = { onReturn: () => void };
 
