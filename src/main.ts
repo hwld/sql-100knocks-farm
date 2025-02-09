@@ -1,12 +1,13 @@
 import { logger } from "./logger.ts";
 import { ValidationError } from "@cliffy/command";
 import { buildCommand } from "./build-command.ts";
-import { startProblemCommand } from "./command/start/start.ts";
+import { startProblemCommand } from "./command/start.ts";
 import { helpCommand } from "./command/help.ts";
 import { exitCommand } from "./command/exit.ts";
 import { exec } from "./exec.ts";
 import { withContext } from "./context/context.ts";
 import { checkCommand } from "./command/check.ts";
+import { randomOrderCommand } from "./command/random-order.ts";
 
 async function main() {
   await exec("docker", ["compose", "up", "-d"]);
@@ -16,6 +17,7 @@ async function main() {
     command
       .command("help", helpCommand({ command }))
       .command("start", startProblemCommand())
+      .command("rand", randomOrderCommand())
       .command("check", checkCommand())
       .command("exit", exitCommand());
 
