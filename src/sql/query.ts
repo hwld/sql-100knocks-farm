@@ -4,7 +4,7 @@ import {
   TransactionError,
 } from "@bartlomieju/postgres";
 import { db } from "./db.ts";
-import { err, ok, Result } from "../result.ts";
+import { Result } from "../result.ts";
 
 export type SQLResult = {
   isSQLEmpty?: boolean;
@@ -27,7 +27,7 @@ export async function query(
     result = await tx.queryObject<Record<string, unknown>>(sql);
   } catch (e) {
     if (e instanceof TransactionError && e.cause instanceof PostgresError) {
-      return err({ type: "UNKNOWN", msg: e.cause.message });
+      return Result.err({ type: "UNKNOWN", msg: e.cause.message });
     }
 
     // 列名が重複すると例外が出ちゃうのでハンドリングする
@@ -39,7 +39,7 @@ export async function query(
     ) {
       // TransactionError以外のエラーではトランザクションはロールバックされないっぽいので手動でロールバックする
       await tx.rollback();
-      return err({ type: "UNKNOWN", msg: e.message });
+      return Result.err({ type: "UNKNOWN", msg: e.message });
     }
     throw e;
   }
@@ -48,12 +48,12 @@ export async function query(
   await tx.rollback();
 
   if (result.command === undefined) {
-    return err({ type: "SQL_EMPTY", msg: "SQL is empty" });
+    return Result.err({ type: "SQL_EMPTY", msg: "SQL is empty" });
   }
 
   const columns = result.columns;
   if (!columns) {
-    return ok({ columns: [], rows: [] });
+    return Result.ok({ columns: [], rows: [] });
   }
 
   // 結果をすべて文字列に変換する
@@ -77,5 +77,5 @@ export async function query(
     return newRow;
   });
 
-  return ok({ columns, rows });
+  return Result.ok({ columns, rows });
 }

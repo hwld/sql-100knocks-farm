@@ -1,4 +1,3 @@
-import { Err } from "neverthrow";
 import { logger } from "../logger.ts";
 import { openProblem } from "./open.ts";
 import { green } from "@std/fmt/colors";
@@ -60,7 +59,7 @@ export class ProblemNavigator {
   #_move = async (problemIndex: number) => {
     const problemNo = this.#problemNoList[problemIndex];
     if (!problemNo) {
-      throw new Err("problemNo must exist in the list");
+      throw new Error("problemNo must exist in the list");
     }
 
     await openProblem(problemNo);

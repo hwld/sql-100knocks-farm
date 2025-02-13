@@ -1,4 +1,5 @@
 import { getProblemMap } from "../context/problem-map.ts";
+import { isErr } from "../result.ts";
 import { isEqualSQLResult } from "../sql/compare.ts";
 import { parseCsv } from "../sql/csv.ts";
 import { query } from "../sql/query.ts";
@@ -20,7 +21,7 @@ export async function loadProblemStatuses(): Promise<ProblemStatuses> {
   for (const problem of allProblems) {
     const answerSQL = await Deno.readTextFile(getProblemPath(problem.no));
     const result = await query(answerSQL);
-    if (result.isErr()) {
+    if (isErr(result)) {
       if (result.error.type === "SQL_EMPTY") {
         unansweredNoList.push(problem.no);
         continue;

@@ -9,6 +9,7 @@ import { getProblemPath } from "../problem/path.ts";
 import { isEqualSQLResult } from "../sql/compare.ts";
 import { parseCsv } from "../sql/csv.ts";
 import { query } from "../sql/query.ts";
+import { isErr } from "../result.ts";
 
 type Args = { problemNav: ProblemNavigator };
 
@@ -24,7 +25,7 @@ export const runProblemCommand = ({ problemNav }: Args) => {
 
       const answerSQL = await Deno.readTextFile(getProblemPath(problemNo));
       const queryResult = await query(answerSQL);
-      if (queryResult.isErr()) {
+      if (isErr(queryResult)) {
         logger.error(`${queryResult.error.msg}`);
         return;
       }
