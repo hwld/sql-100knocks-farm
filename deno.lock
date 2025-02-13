@@ -32,7 +32,6 @@
     "jsr:@std/path@~0.213.1": "0.213.1",
     "jsr:@std/streams@^1.0.8": "1.0.8",
     "jsr:@std/text@~1.0.7": "1.0.10",
-    "npm:neverthrow@^8.1.1": "8.1.1",
     "npm:zod@^3.24.1": "3.24.1"
   },
   "jsr": {
@@ -179,15 +178,6 @@
     }
   },
   "npm": {
-    "@rollup/rollup-linux-x64-gnu@4.31.0": {
-      "integrity": "sha512-zSoHl356vKnNxwOWnLd60ixHNPRBglxpv2g7q0Cd3Pmr561gf0HiAcUBRL3S1vPqRC17Zo2CX/9cPkqTIiai1g=="
-    },
-    "neverthrow@8.1.1": {
-      "integrity": "sha512-DpbZ/UDI0B+TxJB1JysXSfi1++3YK2xLBqQLTlRN0b4zxlZ2MoiB+dKKV8dMRzt1fAFjRKDknXOVJgpl+a4Amw==",
-      "dependencies": [
-        "@rollup/rollup-linux-x64-gnu"
-      ]
-    },
     "zod@3.24.1": {
       "integrity": "sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A=="
     }
@@ -202,7 +192,6 @@
       "jsr:@std/fmt@^1.0.4",
       "jsr:@std/log@~0.224.13",
       "jsr:@std/path@*",
-      "npm:neverthrow@^8.1.1",
       "npm:zod@^3.24.1"
     ]
   }
